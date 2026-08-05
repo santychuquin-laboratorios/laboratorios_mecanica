@@ -39,14 +39,12 @@
 .flow-track,.flow-corner{z-index:7}.bank-record{left:80%;top:63%;transform:translateX(-50%);background:#e8edf4;color:#7b8798;box-shadow:none}.bank-record:disabled{opacity:1;background:#e8edf4;color:#929cad;box-shadow:none}.bank-record:not(:disabled){background:var(--green);color:#fff;box-shadow:0 7px 16px rgba(24,168,123,.28)}.flow-read-m3{top:55%;font-size:.7rem}.right .table-wrap{max-height:none!important;height:auto!important;overflow:visible!important}.right .table-wrap th,.right .table-wrap td{padding:5px 3px}.lab-head .toast{position:static;flex:1;max-width:56%;margin:0 auto;padding:7px 12px;border:1px solid #cbdcf2;border-radius:10px;background:#edf4ff;color:#17355f;text-align:center;font-size:.68rem;font-weight:800;line-height:1.2;transform:none;opacity:0;box-shadow:none}.lab-head .toast.show{opacity:1;transform:none}
 .right .chart-box{height:270px;min-height:270px;padding:9px}.logo svg{width:27px;height:27px;display:block}.right section .history-head h2{color:var(--blue)}.opening-card small{font-weight:900;color:var(--ink)}.valve-ref{position:relative}.catalog-btn{position:absolute;right:2px;top:12px;z-index:2;padding:7px 10px;border-radius:9px;background:var(--blue);color:#fff;text-decoration:none;font-size:.62rem;font-weight:900;letter-spacing:.04em;box-shadow:0 6px 14px rgba(36,107,253,.22)}.catalog-btn:hover{background:#174fc5;transform:translateY(-1px)}
 
-/* FIX PARA TABLETS Y PANTALLAS TACTILES: DISENO APILADO CON SCROLL LIBRE */
-@media (pointer: coarse), (max-width: 1200px) {
+/* FIX PARA TABLETS: MANTENER 3 COLUMNAS PERO PERMITIR SCROLL VERTICAL */
+@media (pointer: coarse) {
     html, body { height: auto !important; overflow: auto !important; }
-    .app { height: auto !important; padding: 15px !important; }
-    .grid { display: flex !important; flex-direction: column !important; gap: 15px !important; }
-    .sidebar, .right, .panel { width: 100% !important; max-width: none !important; overflow: visible !important; min-height: 0 !important; }
-    .scene, .lab { min-height: 600px !important; overflow-x: auto !important; }
-    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(1) !important; transform-origin: bottom center !important; }
+    .app { height: auto !important; min-height: 100vh; }
+    .scene, .lab { min-height: 700px !important; }
+    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.95) !important; transform-origin: top center !important; }
 }
 </style>
 </head>
