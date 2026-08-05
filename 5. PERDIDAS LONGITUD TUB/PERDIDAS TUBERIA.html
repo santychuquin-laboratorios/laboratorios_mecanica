@@ -48,6 +48,8 @@
 .ultrasonic-photo{position:absolute;left:58%;bottom:1%;width:145px;margin:0;text-align:center;z-index:3}.ultrasonic-photo img{display:block;width:100%;height:135px;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 8px 8px rgba(20,33,61,.14))}.ultrasonic-photo figcaption{margin-top:2px;color:#12315b;font-size:.57rem;font-weight:950;letter-spacing:.07em}
 .bucket{overflow:hidden;background:linear-gradient(90deg,rgba(114,120,202,.22),rgba(168,172,235,.3));border-top:5px solid #aeb4f4}.bucket:before{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(90deg,#5269d2,#7889e5 48%,#6676d5);transition:height var(--fill-duration,3s) ease-in}.bucket:after{content:"";position:absolute;left:12%;right:12%;top:4px;height:5px;border-radius:50%;background:rgba(224,230,255,.65)}.bucket.filling:before{height:78%}.bucket.resetting:before{transition:none!important;height:0}
 .toast{display:none!important}
+
+@media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
 </style>
 </head>
 <body>

@@ -472,6 +472,25 @@ ul {
 /* ==========================================================================
    Media Queries (Responsive)
    ========================================================================== */
+@media (max-width: 1080px) and (min-width: 769px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 3rem;
+        gap: 3rem;
+    }
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .hero-graphics {
+        width: 100%;
+    }
+    .carousel-container {
+        height: 350px;
+    }
+}
+
 @media (max-width: 768px) {
     .menu-toggle {
         display: flex;
