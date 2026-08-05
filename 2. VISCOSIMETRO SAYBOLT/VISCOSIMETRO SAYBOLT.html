@@ -57,7 +57,7 @@ button:disabled,select:disabled,input:disabled{cursor:not-allowed;opacity:.48}
 </head>
 <body>
 <main class="app">
-  <header class="topbar"><div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5.5 9.2A2.5 2.5 0 0 0 6.7 21h10.6a2.5 2.5 0 0 0 2.2-3.8L14 8V3"/><path d="M7 16h10"/></svg></div><div><h1>Laboratorio de Fluidos: VISCOSÍMETRO SAYBOLT</h1></div></div><label class="student-field" for="studentName"><span>Alumno</span><input id="studentName" type="text" maxlength="80" autocomplete="name" placeholder="Ingrese nombre y apellido"></label><div class="top-actions"><button class="top-btn" id="backBtn" type="button">← <span>Volver</span></button><button class="top-btn reset-all" id="resetAllBtn" type="button">Reiniciar laboratorio</button><button class="top-icon" id="helpBtn" type="button" aria-label="Mostrar ayuda">?</button></div></header>
+  <header class="topbar"><div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5.5 9.2A2.5 2.5 0 0 0 6.7 21h10.6a2.5 2.5 0 0 0 2.2-3.8L14 8V3"/><path d="M7 16h10"/></svg></div><div><h1>Laboratorio de Fluidos: VISCOSÍMETRO SAYBOLT</h1></div></div><label class="student-field" for="studentName"><span>Alumno</span><input id="studentName" type="text" maxlength="80" autocomplete="name" placeholder="Ingrese su nombre"></label><div class="top-actions"><button class="top-btn" id="backBtn" type="button">← <span>Volver</span></button><button class="top-btn reset-all" id="resetAllBtn" type="button">Reiniciar laboratorio</button><button class="top-icon" id="helpBtn" type="button" aria-label="Mostrar ayuda">?</button></div></header>
   <div class="layout">
     <aside class="panel sidebar">
       <section><span class="eyebrow">Guía de práctica</span><h2>Tiempo de flujo Saybolt</h2><p class="copy">Mide el tiempo que necesita una muestra para descargar 60 mL a temperatura controlada.</p></section>
@@ -115,7 +115,7 @@ $('resetAllBtn').addEventListener('click',()=>{if(!confirm('¿Deseas borrar el n
 $('helpBtn').addEventListener('click',()=>{$('hint').innerHTML='<b>Ayuda:</b> selecciona la muestra, ajusta la temperatura, estabiliza el baño, abre el orificio y guarda la medición.';$('hint').scrollIntoView({behavior:'smooth',block:'nearest'});beep(560,.08);});
 $('printBtn').addEventListener('click',printResults);
 $('studentName').addEventListener('input',event=>setLabAccess(event.target.value.trim().length>=3));
-updateSample();updateTemp();setLabAccess(false);$('studentName').focus();
+updateSample();updateTemp();setLabAccess(false);
 </script>
 </body>
 </html>
