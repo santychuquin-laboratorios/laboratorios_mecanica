@@ -37,15 +37,64 @@
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
 
-
-/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) - SIN SCROLL */
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
 @media (max-height: 850px) and (min-width: 741px) {
-  html, body { height: 100% !important; overflow: hidden !important; }
-  .app { height: 100% !important; }
-  .scene { min-height: 0 !important; }
-  .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.65) !important; transform-origin: bottom center !important; }
-  .lab { transform: scale(0.85); transform-origin: top center; }
-});$('#fine').addEventListener('input',update);$('#balanceBtn').addEventListener('click',balance);$('#recordBtn').addEventListener('click',record);$('#resetBtn').addEventListener('click',reset);$('#printBtn').addEventListener('click',printReport);window.addEventListener('afterprint',()=>$('#printReport').setAttribute('aria-hidden','true'));update();setStep(0);
+  html, body { height: auto !important; overflow: auto !important; }
+  .app { height: auto !important; min-height: 100vh; }
+  .scene, .lab { min-height: 560px !important; }
+}
+</style>
+</head>
+<body>
+<main class="app">
+ <header class="topbar"><div class="brand"><div class="logo">⚗</div><div><h1>Laboratorio de Fluidos: FUERZAS HIDROSTÁTICAS</h1></div></div><div class="topbar-tools"><div class="student"><label for="student">Alumno</label><input id="student" autocomplete="name" placeholder="Ingrese nombre y apellido"></div><a href="../index.html" class="volver-btn" style="text-decoration:none; display:flex; align-items:center;">← Volver</a><button class="restart-btn" id="resetAllBtn" type="button">Reiniciar laboratorio</button><button class="header-icon" id="helpBtn" type="button" aria-label="Ayuda">?</button></div></header>
+ <div class="grid">
+  <aside class="panel sidebar">
+   <section><div class="eyebrow">Objetivo</div><h2>Centro de presión</h2><p class="copy">Determina la fuerza hidrostática sobre una cara plana y comprueba el equilibrio de momentos del brazo.</p></section>
+   <section class="step-list"><div class="step active"><div class="step-num">1</div><div><b>Coloca la masa</b><br>Selecciona una pesa.</div></div><div class="step"><div class="step-num">2</div><div><b>Llena el depósito</b><br>Ajusta la altura d.</div></div><div class="step"><div class="step-num">3</div><div><b>Equilibra</b><br>Busca la posición horizontal.</div></div><div class="step"><div class="step-num">4</div><div><b>Registra</b><br>Guarda el ensayo.</div></div></section>
+   <section class="control"><label>Masa suspendida <span id="massLabel">20 g</span></label><div class="mass-grid" id="massGrid"></div></section>
+   <section class="control"><label for="depth">Altura de agua, d <span id="depthLabel">0,0 mm</span></label><input id="depth" type="range" min="0" max="100" step="0.1" value="0"></section>
+   <div class="btn-row"><button class="btn primary" id="balanceBtn">Equilibrar</button><button class="btn secondary" id="resetBtn">Limpiar</button></div>
+  </aside>
+  <section class="panel lab">
+   <div class="lab-head"><h2>Banco de fuerzas hidrostáticas</h2><div class="status"><i class="dot"></i><span id="status">Listo para el ensayo</span></div></div>
+   <div class="scene" id="scene"><div class="reading"><small>ALTURA d</small><strong id="mainDepth">0,0</strong> <span>mm</span></div><div class="imbalance-alert" id="imbalanceAlert" role="status" aria-live="polite">Sistema en desequilibrio</div>
+    <div class="rig schematic-rig"><div class="diagram-water-box" aria-hidden="true"><div id="water"></div></div><img class="schematic-image" src="esquema-hidrostatico.png" alt="Esquema lateral del banco de fuerzas hidrostáticas con cuadrante, brazo, masa y dimensiones"><div class="edge-ruler" aria-label="Regleta de profundidad de 0 a 100 milímetros"><span class="r100">100</span><span class="r50">50</span><span class="r0">0</span></div><div class="schematic-depth" id="dMark"><span id="dMarkText">d = 0,0 mm</span></div><div class="schematic-mass" id="weightTag">20 g</div><div class="balance-needle" hidden></div><div id="beam" hidden></div></div><div class="scene-formula">W·L = F [(H−D) + (D−d) + ⅔d]</div>
+    <div class="toast" id="toast"></div>
+   </div>
+   <div class="lab-foot"><span><b>Datos del laboratorio:</b> D = 0,100 m · H = 0,200 m · b = 0,075 m · L = 0,275 m · ρ = 998,2 kg/m³ · g = 9,81 m/s²</span></div>
+  </section>
+  <aside class="panel right">
+   <section><div class="results-title-row"><div><div class="eyebrow">Panel de resultados</div><h2>Medición actual</h2></div><button class="print-btn" id="printBtn" type="button">Imprimir PDF</button></div><div class="metrics"><div class="metric"><small>Peso, W</small><strong id="weightMetric">0,196</strong> <span>N</span></div><div class="metric"><small>F experimental</small><strong id="fExp">—</strong> <span>N</span></div><div class="metric"><small>F teórica</small><strong id="fTheory">0,588</strong> <span>N</span></div><div class="metric"><small>Error relativo</small><strong id="error">—</strong> <span>%</span></div></div></section>
+   <section class="balance"><label for="fine">Ajuste fino del nivel</label><input id="fine" type="range" min="-8" max="8" step="0.1" value="0"><button class="btn primary" id="recordBtn" style="width:100%">Registrar medición</button><div class="feedback" id="feedback">Equilibra el brazo antes de registrar.</div></section>
+   <section><h2 style="color: var(--blue);">Esquema de cálculo</h2><div class="diagram"><b>F teórica = γ·h<sub>c</sub>·A</b><br>γ = ρg &nbsp;·&nbsp; Peso específico del fluido.<br><b>F experimental = W·L / y</b><br>y = (H−D) + (D−d) + 2d/3.</div></section>
+   <section><h2>Registro de ensayos</h2><div class="table-wrap"><table><thead><tr><th>m (g)</th><th>d (mm)</th><th>F exp. (N)</th><th>F teo. (N)</th><th>Error</th></tr></thead><tbody id="history"><tr><td colspan="5" class="empty">Aún no hay mediciones registradas.</td></tr></tbody></table></div></section>
+  </aside>
+ </div>
+</main>
+<section class="print-report" id="printReport" aria-hidden="true"></section>
+<script>
+const rho=998.2,g=9.81,b=.075,L=.275,D=.1,H=.2,masses=[20,30,40,50,60,70,80,90,100];
+const $=s=>document.querySelector(s);let mass=20,balanced=false,records=[];
+const fmt=(n,d=3)=>n.toLocaleString('es-EC',{minimumFractionDigits:d,maximumFractionDigits:d});
+function theory(d){d/=1000;return rho*g*b*d*d/2}function arm(d){d/=1000;return(H-D)+(D-d)+2*d/3}function experimental(){return(mass/1000*g*L)/arm(+$('[id=depth]').value)}
+function targetDepth(){return Math.sqrt((2*(mass/1000*g*L))/(rho*g*b*((H-D)+(D-(+$('#depth').value/1000))+2*(+$('#depth').value/1000)/3)))*1000}
+function setStep(n){document.querySelectorAll('.step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n)})}
+function water3D(pct){$('#dMark').style.height=(pct*.72)+'px'}
+function update(){const d=+$('#depth').value,pct=d/D/1000*100,fT=theory(d),fE=experimental(),diff=(fT-fE)/Math.max(fT,.001),tilt=Math.max(-7,Math.min(7,diff*10+(+$('#fine').value))),needsBalance=d>0&&!balanced;$('#depthLabel').textContent=fmt(d,1)+' mm';$('#mainDepth').textContent=fmt(d,1);$('#dMarkText').textContent='d = '+fmt(d,1)+' mm';$('#water').style.height=(20+pct*.72)+'px';water3D(pct);$('#dMark').style.setProperty('--water',pct+'%');$('#imbalanceAlert').classList.toggle('show',needsBalance);$('#balanceBtn').classList.toggle('needs-balance',needsBalance);$('#fTheory').textContent=fmt(fT);$('#weightMetric').textContent=fmt(mass/1000*g);$('#beam').style.setProperty('--tilt',tilt+'deg');$('.balance-needle').style.transform='rotate('+(-tilt*.7)+'deg)';if(!balanced){$('#fExp').textContent='—';$('#error').textContent='—'}setStep(1)}
+function selectMass(v){mass=v;balanced=false;document.querySelectorAll('.mass-btn').forEach(x=>x.classList.toggle('active',+x.dataset.mass===v));$('#massLabel').textContent=v+' g';$('#weightTag').textContent=v+' g';$('#status').textContent='Ajusta el nivel de agua';$('#fine').value=0;update();setStep(1)}
+function balance(){const d0=+$('#depth').value;let lo=5,hi=100;for(let i=0;i<50;i++){const mid=(lo+hi)/2;if(theory(mid)<(mass/1000*g*L)/arm(mid))lo=mid;else hi=mid}const d=(lo+hi)/2;$('#depth').value=d;$('#fine').value=0;balanced=true;update();const fT=theory(d),fE=experimental(),err=Math.abs(fE-fT)/fT*100;$('#fExp').textContent=fmt(fE);$('#error').textContent=fmt(err,2);$('#beam').style.setProperty('--tilt','0deg');$('.balance-needle').style.transform='rotate(0deg)';$('#status').textContent='Brazo en equilibrio';$('#feedback').textContent='Equilibrio alcanzado. Ya puedes registrar.';$('#feedback').style.color='var(--green)';setStep(2);show('Nivel de equilibrio encontrado')}
+function record(){if(!balanced){$('#feedback').textContent='Primero pulsa Equilibrar.';$('#feedback').style.color='var(--orange)';return}const d=+$('#depth').value,fT=theory(d),fE=experimental(),err=Math.abs(fE-fT)/fT*100;records=records.filter(r=>r.m!==mass);records.push({m:mass,d,fT,fE,err});records.sort((a,b)=>a.m-b.m);$('#history').innerHTML=records.map(r=>`<tr><td>${r.m}</td><td>${fmt(r.d,1)}</td><td>${fmt(r.fE)}</td><td>${fmt(r.fT)}</td><td>${fmt(r.err,2)}%</td></tr>`).join('');$('.table-wrap').classList.toggle('is-scrollable',records.length>4);setStep(3);show('Medición registrada')}
+function reset(){balanced=false;records=[];mass=20;$('#history').innerHTML='<tr><td colspan="5" class="empty">Aún no hay mediciones registradas.</td></tr>';$('.table-wrap').classList.remove('is-scrollable');$('#depth').value=0;$('#fine').value=0;$('#fExp').textContent='—';$('#error').textContent='—';$('#feedback').textContent='Equilibra el brazo antes de registrar.';$('#feedback').style.color='';selectMass(20);setStep(0)}
+function show(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(show.t);show.t=setTimeout(()=>t.classList.remove('show'),1900)}
+function captureCard(r,i){const waterHeight=(20+.72*r.d)/410*100;return `<article class="capture-card"><h3>Ensayo ${i+1} · Masa ${r.m} g</h3><div class="capture-scene"><div class="capture-water" style="height:${waterHeight}%"></div><img src="esquema-hidrostatico.png" alt="Captura del banco para ${r.m} gramos y d igual a ${fmt(r.d,1)} milímetros"><span class="capture-mass">${r.m} g</span></div><div class="capture-caption"><span>d = ${fmt(r.d,1)} mm</span><span>F = ${fmt(r.fT)} N</span><span>Error = ${fmt(r.err,2)}%</span></div></article>`}
+function printReport(){if(!records.length){show('Registra al menos una medición antes de imprimir');return}const now=new Date(),student=($('#student').value.trim()||'No especificado').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));$('#printReport').innerHTML=`<header class="report-head"><div><h1>Informe de fuerzas hidrostáticas</h1><p>Laboratorio virtual de fluidos · Fuerza sobre una superficie plana</p><p><b>Estudiante:</b> ${student}</p></div><div class="report-meta"><p><b>Fecha:</b> ${now.toLocaleDateString('es-EC')}</p><p><b>Hora:</b> ${now.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'})}</p><p><b>Fluido:</b> Agua</p></div></header><div class="report-stats"><div class="report-stat"><small>Diámetro D</small><strong>0,100 m</strong></div><div class="report-stat"><small>Altura H</small><strong>0,200 m</strong></div><div class="report-stat"><small>Ancho b</small><strong>0,075 m</strong></div><div class="report-stat"><small>Brazo L</small><strong>0,275 m</strong></div></div><h2>Resultados experimentales</h2><table><thead><tr><th>N.º</th><th>Masa (g)</th><th>d (mm)</th><th>F experimental (N)</th><th>F teórica (N)</th><th>Error (%)</th></tr></thead><tbody>${records.map((r,i)=>`<tr><td>${i+1}</td><td>${r.m}</td><td>${fmt(r.d,1)}</td><td>${fmt(r.fE)}</td><td>${fmt(r.fT)}</td><td>${fmt(r.err,2)}</td></tr>`).join('')}</tbody></table><div class="report-equation">W·L = F [(H−D) + (D−d) + ⅔d]</div><h2>Capturas del banco de pruebas</h2><div class="report-captures">${records.map(captureCard).join('')}</div><div class="report-note"><b>Datos:</b> ρ = 998,2 kg/m³; g = 9,81 m/s². Cada captura representa el nivel de equilibrio registrado para la masa correspondiente.</div><div class="report-sign"><div>Firma del estudiante</div></div>`;$('#printReport').setAttribute('aria-hidden','false');setTimeout(()=>window.print(), 600)}
+$('#massGrid').innerHTML=masses.map(m=>`<button class="mass-btn${m===20?' active':''}" data-mass="${m}">${m} g</button>`).join('');
+const protectedControls=[...document.querySelectorAll('.mass-btn'),$('#depth'),$('#balanceBtn'),$('#resetBtn'),$('#fine'),$('#recordBtn'),$('#printBtn')];
+function validStudentName(value){const parts=value.trim().split(/\s+/).filter(Boolean);return parts.length>=2&&parts.every(p=>p.length>=2)}
+function setLabAccess(ready){protectedControls.forEach(el=>{el.disabled=!ready;el.setAttribute('aria-disabled',String(!ready))});document.querySelector('.grid').classList.toggle('control-locked',!ready);if(!ready){$('#status').textContent='Ingrese nombre y apellido para comenzar';$('#imbalanceAlert').classList.remove('show')}else{$('#status').textContent='Laboratorio habilitado';update()}}
+function fullReset(){reset();$('#student').value='';$('#printReport').innerHTML='';setLabAccess(false);show('Laboratorio reiniciado')}
+$('#massGrid').addEventListener('click',e=>{if(e.target.dataset.mass)selectMass(+e.target.dataset.mass)});$('#depth').addEventListener('input',()=>{balanced=false;$('#status').textContent='Nivel modificado';update()});$('#fine').addEventListener('input',update);$('#balanceBtn').addEventListener('click',balance);$('#recordBtn').addEventListener('click',record);$('#resetBtn').addEventListener('click',reset);$('#printBtn').addEventListener('click',printReport);window.addEventListener('afterprint',()=>$('#printReport').setAttribute('aria-hidden','true'));update();setStep(0);
 $('#student').addEventListener('input',e=>setLabAccess(validStudentName(e.target.value)));$('#resetAllBtn').addEventListener('click',fullReset);$('#helpBtn').addEventListener('click',()=>show('Ingrese nombre y apellido; seleccione una masa, ajuste d, equilibre y registre.'));setLabAccess(false);
 </script>
 </body>
