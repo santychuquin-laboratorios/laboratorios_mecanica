@@ -20,14 +20,14 @@
 .results-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.print-btn{border:1px solid #b9d2c8;background:#edf8f4;color:#08775b;border-radius:10px;padding:8px 10px;font-size:.68rem;font-weight:850;white-space:nowrap}.print-btn:hover{background:#dff5ec}.print-report{display:none}
 @media print{@page{size:A4;margin:12mm}html,body{height:auto!important;overflow:visible!important;background:#fff!important}.app{display:none!important}.print-report{display:block!important;color:#14213d;font-family:Arial,sans-serif}.report-head{display:flex;justify-content:space-between;gap:20px;border-bottom:3px solid #246bfd;padding-bottom:10px}.report-head h1{font-size:20px;margin:0 0 5px}.report-head p{font-size:10px;margin:3px 0;color:#526782}.report-meta{text-align:right}.report-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.report-stat{background:#f0f5fa;border-radius:8px;padding:8px}.report-stat small{display:block;color:#61708b;font-size:8px}.report-stat b{font-size:12px}.print-report h2{font-size:13px;color:#246bfd;margin:14px 0 6px}.print-report table{font-size:9px;width:100%;border-collapse:collapse}.print-report th,.print-report td{padding:5px;border:1px solid #dce5ef}.print-report th{background:#edf4ff}.report-captures{display:grid;grid-template-columns:1fr 1fr;gap:8px}.report-capture{border:1px solid #dce5ef;border-radius:8px;padding:6px;break-inside:avoid}.report-capture img{display:block;width:100%;height:auto}.report-capture p{margin:4px 0 0;font-size:9px;font-weight:bold}.report-note{margin-top:12px;padding:8px;background:#f7f9fc;border-left:3px solid #246bfd;font-size:9px;line-height:1.4}}
 
-/* FIX PARA TABLETS: DISENO APILADO CON SCROLL LIBRE */
-@media (max-width: 1200px) {
+/* FIX PARA TABLETS Y PANTALLAS TACTILES: DISENO APILADO CON SCROLL LIBRE */
+@media (pointer: coarse), (max-width: 1200px) {
     html, body { height: auto !important; overflow: auto !important; }
     .app { height: auto !important; padding: 15px !important; }
     .grid { display: flex !important; flex-direction: column !important; gap: 15px !important; }
     .sidebar, .right, .panel { width: 100% !important; max-width: none !important; overflow: visible !important; min-height: 0 !important; }
-    .scene, .lab { min-height: 550px !important; overflow-x: auto !important; }
-    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.9) !important; transform-origin: bottom center !important; }
+    .scene, .lab { min-height: 600px !important; overflow-x: auto !important; }
+    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(1) !important; transform-origin: bottom center !important; }
 }
 </style>
 </head>

@@ -49,14 +49,14 @@
 .bucket{overflow:hidden;background:linear-gradient(90deg,rgba(114,120,202,.22),rgba(168,172,235,.3));border-top:5px solid #aeb4f4}.bucket:before{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(90deg,#5269d2,#7889e5 48%,#6676d5);transition:height var(--fill-duration,3s) ease-in}.bucket:after{content:"";position:absolute;left:12%;right:12%;top:4px;height:5px;border-radius:50%;background:rgba(224,230,255,.65)}.bucket.filling:before{height:78%}.bucket.resetting:before{transition:none!important;height:0}
 .toast{display:none!important}
 
-/* FIX PARA TABLETS: DISENO APILADO CON SCROLL LIBRE */
-@media (max-width: 1200px) {
+/* FIX PARA TABLETS Y PANTALLAS TACTILES: DISENO APILADO CON SCROLL LIBRE */
+@media (pointer: coarse), (max-width: 1200px) {
     html, body { height: auto !important; overflow: auto !important; }
     .app { height: auto !important; padding: 15px !important; }
     .grid { display: flex !important; flex-direction: column !important; gap: 15px !important; }
     .sidebar, .right, .panel { width: 100% !important; max-width: none !important; overflow: visible !important; min-height: 0 !important; }
-    .scene, .lab { min-height: 550px !important; overflow-x: auto !important; }
-    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.9) !important; transform-origin: bottom center !important; }
+    .scene, .lab { min-height: 600px !important; overflow-x: auto !important; }
+    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(1) !important; transform-origin: bottom center !important; }
 }
 </style>
 </head>

@@ -25,14 +25,14 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
 @media print{.print-report .report-sign{grid-template-columns:1fr;width:45%;margin:55px auto 0}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* FIX PARA TABLETS: DISENO APILADO CON SCROLL LIBRE */
-@media (max-width: 1200px) {
+/* FIX PARA TABLETS Y PANTALLAS TACTILES: DISENO APILADO CON SCROLL LIBRE */
+@media (pointer: coarse), (max-width: 1200px) {
     html, body { height: auto !important; overflow: auto !important; }
     .app { height: auto !important; padding: 15px !important; }
     .grid { display: flex !important; flex-direction: column !important; gap: 15px !important; }
     .sidebar, .right, .panel { width: 100% !important; max-width: none !important; overflow: visible !important; min-height: 0 !important; }
-    .scene, .lab { min-height: 550px !important; overflow-x: auto !important; }
-    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.9) !important; transform-origin: bottom center !important; }
+    .scene, .lab { min-height: 600px !important; overflow-x: auto !important; }
+    .machine, .rig, .mesa-ensayo { transform: translateX(-50%) scale(1) !important; transform-origin: bottom center !important; }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
