@@ -47,6 +47,13 @@ button:disabled,select:disabled,input:disabled{cursor:not-allowed;opacity:.48}
 @media print{.print-report,.print-report *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.capture-frame{height:385px}.capture-frame .lab{height:385px}.capture-frame .scene{height:330px}.capture-frame .machine{bottom:8px;transform:translateX(-50%) scale(.45)!important}.capture-frame .bench{height:48px}.capture-frame .timer{transform:scale(.72)}.capture-frame .sample-tag{transform:scale(.76)}}
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
+
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
+@media (max-height: 850px) and (min-width: 741px) {
+  html, body { height: auto !important; overflow: auto !important; }
+  .app { height: auto !important; min-height: 100vh; }
+  .scene, .lab { min-height: 560px !important; }
+}
 </style>
 </head>
 <body>

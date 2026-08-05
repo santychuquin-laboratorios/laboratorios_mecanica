@@ -26,6 +26,13 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
+
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
+@media (max-height: 850px) and (min-width: 741px) {
+  html, body { height: auto !important; overflow: auto !important; }
+  .app { height: auto !important; min-height: 100vh; }
+  .scene, .lab { min-height: 560px !important; }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>

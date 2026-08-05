@@ -50,6 +50,13 @@
 .toast{display:none!important}
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
+
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
+@media (max-height: 850px) and (min-width: 741px) {
+  html, body { height: auto !important; overflow: auto !important; }
+  .app { height: auto !important; min-height: 100vh; }
+  .scene, .lab { min-height: 560px !important; }
+}
 </style>
 </head>
 <body>
