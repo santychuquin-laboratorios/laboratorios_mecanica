@@ -41,11 +41,14 @@
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
 
-/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
+
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) - SIN SCROLL */
 @media (max-height: 850px) and (min-width: 741px) {
-  html, body { height: auto !important; overflow: auto !important; }
-  .app { height: auto !important; min-height: 100vh; }
-  .scene, .lab { min-height: 560px !important; }
+  html, body { height: 100% !important; overflow: hidden !important; }
+  .app { height: 100% !important; }
+  .scene { min-height: 0 !important; }
+  .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.65) !important; transform-origin: bottom center !important; }
+  .lab { transform: scale(0.85); transform-origin: top center; }
 }
 </style>
 </head>
