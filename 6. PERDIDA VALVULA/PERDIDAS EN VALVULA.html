@@ -42,14 +42,18 @@
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
 
 
-/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) - SIN SCROLL */
-@media (max-height: 850px) and (min-width: 741px) {
-  html, body { height: 100% !important; overflow: hidden !important; }
-  .app { height: 100% !important; }
-  .scene { min-height: 0 !important; }
-  .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.65) !important; transform-origin: bottom center !important; }
-  .lab { transform: scale(0.85); transform-origin: top center; }
+/* FIX GLOBAL: BLOQUEAR SCROLL EXTERNO EN TODAS LAS TABLETS Y PCS */
+@media (min-width: 741px) {
+  html, body { height: 100% !important; max-height: 100vh !important; overflow: hidden !important; }
+  .app { height: 100% !important; max-height: 100vh !important; display: flex; flex-direction: column; }
+  .grid { flex: 1; min-height: 0; }
+  .panel { min-height: 0; overflow-y: auto; }
+  .scene { min-height: 0 !important; flex: 1; }
 }
+/* Ajuste ultra agresivo del tamaño de los equipos según la altura de la pantalla para que jamás tapen nada */
+@media (min-width: 741px) and (max-height: 900px) { .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.75) !important; transform-origin: bottom center !important; } }
+@media (min-width: 741px) and (max-height: 760px) { .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.60) !important; transform-origin: bottom center !important; } }
+@media (min-width: 741px) and (max-height: 650px) { .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.48) !important; transform-origin: bottom center !important; } }
 </style>
 </head>
 <body>
