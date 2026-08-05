@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio: [Nombre del Laboratorio] | VirtuaLab</title>
+    <link rel="stylesheet" href="../../css/style.css"> <!-- Estilos base -->
+    <link rel="stylesheet" href="style.css"> <!-- Estilos específicos de este lab -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="lab-page">
+
+    <!-- Navbar simple para laboratorios -->
+    <header class="header">
+        <div class="container">
+            <a href="../../PAGINA WEB.html" class="logo">
+                <span class="logo-icon">⬅️</span> Volver al Catálogo
+            </a>
+            <h1 class="header-title">VirtuaLab</h1>
+        </div>
+    </header>
+
+    <main class="container lab-container">
+        <!-- Encabezado del Laboratorio -->
+        <section class="lab-header">
+            <h2>[Nombre del Laboratorio]</h2>
+            <p class="subtitle">Categoría: [Categoría] | Dificultad: [Nivel]</p>
+        </section>
+
+        <!-- Contenido dividido en layout de 2 columnas (si la pantalla es grande) -->
+        <div class="lab-layout">
+            
+            <!-- Columna Izquierda: Teoría, Variables y Controles -->
+            <aside class="lab-sidebar panel">
+                
+                <section class="lab-section">
+                    <h3>Objetivo</h3>
+                    <p>[Descripción del objetivo principal de la práctica].</p>
+                </section>
+
+                <section class="lab-section">
+                    <h3>Fundamento teórico</h3>
+                    <p>[Breve explicación teórica o fórmulas relevantes].</p>
+                </section>
+
+                <section class="lab-section">
+                    <h3>Variables / Controles</h3>
+                    <!-- Formulario de controles interactivos -->
+                    <form id="lab-controls">
+                        <div class="control-group">
+                            <label for="var1">Variable 1:</label>
+                            <input type="range" id="var1" min="0" max="100" value="50">
+                            <span id="var1-val">50</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="var2">Variable 2:</label>
+                            <input type="number" id="var2" value="10">
+                        </div>
+                        <button type="button" id="btn-simulate" class="btn-primary" style="width: 100%; margin-top: 1rem;">Calcular / Simular</button>
+                    </form>
+                </section>
+
+            </aside>
+
+            <!-- Columna Derecha: Simulación, Resultados, Gráficos y Procedimiento -->
+            <div class="lab-main-content">
+                
+                <section class="lab-section panel">
+                    <h3>Simulación</h3>
+                    <div id="simulation-area" class="simulation-area">
+                        <!-- Aquí va el canvas o visualización de la simulación -->
+                        <p class="placeholder-text">[Área de simulación visual]</p>
+                    </div>
+                </section>
+
+                <div class="results-grid">
+                    <section class="lab-section panel">
+                        <h3>Tabla de Resultados</h3>
+                        <table id="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Variable A</th>
+                                    <th>Variable B</th>
+                                    <th>Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filas dinámicas -->
+                                <tr>
+                                    <td colspan="3" class="text-center">Realice una simulación</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section class="lab-section panel">
+                        <h3>Gráficas</h3>
+                        <div id="chart-area" class="chart-area">
+                            <!-- Contenedor para gráficos (ej. Chart.js) -->
+                            <p class="placeholder-text">[Área de gráfico]</p>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="lab-section panel">
+                    <h3>Procedimiento</h3>
+                    <ol>
+                        <li>Ajusta los valores de las variables en el panel de control.</li>
+                        <li>Observa los cambios en el área de simulación.</li>
+                        <li>Haz clic en "Calcular" para registrar los resultados.</li>
+                        <li>Analiza la gráfica generada.</li>
+                    </ol>
+                </section>
+
+                <section class="lab-section panel">
+                    <h3>Preguntas</h3>
+                    <p>1. ¿Qué sucede cuando aumentas la variable 1 al máximo?</p>
+                    <p>2. ¿Cómo afecta la variable 2 al resultado final?</p>
+                </section>
+
+                <section class="lab-section panel">
+                    <h3>Conclusiones</h3>
+                    <textarea placeholder="Escribe tus conclusiones aquí..." rows="4" style="width:100%; padding: 0.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);"></textarea>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
