@@ -41,84 +41,15 @@
 
 @media(max-width:1050px) and (min-width:741px) { .scene { overflow-x: auto; } .rig, .mesa-ensayo { transform: translateX(-50%) scale(0.85); transform-origin: bottom center; } }
 
-/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) */
+
+/* FIX PARA PANTALLAS CORTAS (TABLETS EN HORIZONTAL) - SIN SCROLL */
 @media (max-height: 850px) and (min-width: 741px) {
-  html, body { height: auto !important; overflow: auto !important; }
-  .app { height: auto !important; min-height: 100vh; }
-  .scene, .lab { min-height: 560px !important; }
-}
-</style>
-</head>
-<body>
-<main class="app">
-  <header class="topbar">
-    <div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5.5 9.2A2.5 2.5 0 0 0 6.7 21h10.6a2.5 2.5 0 0 0 2.2-3.8L14 8V3"/><path d="M7 16h10"/></svg></div><div><h1><strong>Laboratorio de Fluidos: PÉRDIDAS EN VÁLVULA</strong></h1></div></div>
-    <label class="student-field">Estudiante <input id="studentName" autocomplete="name" placeholder="Escribe tu nombre para comenzar"></label>
-    <div class="top-actions"><button class="pill" id="backBtn" type="button">← Volver</button><button class="pill reset-all" id="resetAllBtn" type="button">Reiniciar laboratorio</button><button class="icon-btn" id="helpBtn" aria-label="Mostrar ayuda">?</button></div>
-  </header>
-  <div class="grid">
-    <aside class="panel sidebar">
-      <section><div class="eyebrow">Práctica experimental</div><h2>Procedimiento</h2><p class="copy">Modifica la apertura de la válvula, estabiliza el flujo y determina la pérdida de carga y el coeficiente K.</p></section>
-      <div class="step-list">
-        <div class="step active"><span class="step-num">1</span><span>Ingresa el nombre del estudiante.</span></div>
-        <div class="step"><span class="step-num">2</span><span>Selecciona la apertura de la válvula.</span></div>
-        <div class="step"><span class="step-num">3</span><span>Enciende la bomba y espera la lectura.</span></div>
-        <div class="step"><span class="step-num">4</span><span>Calcula K y verifica el resultado.</span></div>
-      </div>
-      <div class="control"><label for="opening">Apertura de válvula <span id="openingLabel">0 %</span></label><input id="opening" type="range" min="0" max="100" step="10" value="0" disabled></div>
-      <div class="btn-row"><button class="btn primary" id="startBtn" disabled>▶ Encender bomba</button><button class="btn secondary" id="newBtn" disabled>↻ Nuevo ensayo</button></div>
-      <div class="type-chip"><span>Tipo de válvula</span><b>Paso anular<br>corona de aletas</b></div>
-      <div class="valve-ref"><a class="catalog-btn" href="PASO ANULAR CLASES.pdf" target="_blank" rel="noopener" title="Abrir catálogo de paso anular">CATÁLOGO</a><img src="valvula-despiece.jpg" alt="Despiece de válvula con corona de aletas"><small>Corona de aletas DN 200 · K digitalizado de curva de referencia</small></div>
-    </aside>
-    <section class="panel lab">
-      <div class="lab-head"><h2>Banco hidráulico virtual</h2><div class="toast" id="toast" role="status" aria-live="polite"></div><div class="status"><span class="status-dot"></span><span id="statusText">Ingresa el nombre del estudiante</span></div></div>
-      <div class="scene" id="scene">
-        <div class="opening-card"><small>APERTURA DE LA VÁLVULA</small><strong id="openingDisplay">0 %</strong></div>
-        <button class="pump-state" id="pumpSwitch" type="button" disabled aria-label="Encender o apagar la bomba" aria-pressed="false"><i></i><span id="pumpStateText">BOMBA · OFF</span></button>
-        <div class="pipe h1"></div><div class="pipe v1"></div><div class="pipe h2"></div><div class="pipe v2"></div><div class="side-loop left" aria-hidden="true"></div><div class="side-loop right" aria-hidden="true"></div><div class="elbow top-left" aria-hidden="true"></div><div class="elbow top-right" aria-hidden="true"></div><div class="elbow bottom-left" aria-hidden="true"></div><div class="elbow bottom-right" aria-hidden="true"></div><div class="flow-track horizontal flow-top" aria-hidden="true"></div><div class="flow-track vertical flow-right" aria-hidden="true"></div><div class="flow-track horizontal flow-bottom" aria-hidden="true"></div><div class="flow-track vertical flow-left" aria-hidden="true"></div><div class="flow-corner tl" aria-hidden="true"></div><div class="flow-corner tr" aria-hidden="true"></div><div class="flow-corner bl" aria-hidden="true"></div><div class="flow-corner br" aria-hidden="true"></div><div class="water"></div>
-        <div class="pressure-tap in"></div><div class="pressure-tap out"></div><div class="pressure-line in"></div><div class="pressure-line out"></div>
-        <img class="tank" src="tanque.png" alt="Tanque de almacenamiento del banco hidráulico">
-        <img class="pump" src="bomba.png" alt="Bomba centrífuga">
-        <img class="valve" id="valveImage" src="valvula.png" alt="Válvula de control roja" title="Haz clic para aumentar la apertura 10 %">
-        <div class="gauge-label in">MANÓMETRO<br>Entrada</div><img class="gauge in" src="manometro.png" alt="Manómetro de entrada"><span class="instrument-needle needle-in" aria-hidden="true"></span>
-        <div class="gauge-label out">MANÓMETRO<br>Salida</div><img class="gauge out" src="manometro.png" alt="Manómetro de salida"><span class="instrument-needle needle-out" aria-hidden="true"></span>
-        <img class="diff" src="manometro-diferencial.png" alt="Manómetro diferencial"><span class="instrument-needle needle-diff" aria-hidden="true"></span><div class="diff-label">PÉRDIDA EN VÁLVULA</div><div class="readout-card"><strong id="diffReading">— mca</strong><small>LECTURA DIFERENCIAL</small></div>
-        <img class="meter" src="flujometro.png" alt="Flujómetro digital"><div class="equipment-label flow-label">FLUJÓMETRO</div><div class="flow-read" id="flowReading">0,0000 l/s</div><div class="flow-read flow-read-m3" id="flowReadingM3">0,0000 m³/s</div><div class="flow-arrow">➜</div>
-        <div class="equipment-label pump-label">BOMBA</div><button class="bank-record" id="bankRecordBtn" type="button" disabled>GRABAR DATOS</button>
-      </div>
-      <div class="lab-foot"><span>Banco de ensayo · agua a 20 °C · g = 9,81 m/s² · <b>Diámetro válvula = 200 mm</b></span><span class="formula">h<sub>acc</sub> = 8KQ² / π²gD<sub>acc</sub>⁴</span></div>
-    </section>
-    <aside class="panel right">
-      <div class="results-title"><div><div class="eyebrow">Lecturas</div><h2>Resultados del ensayo</h2></div><button class="print-btn" id="printBtn" disabled>Imprimir reporte</button></div>
-      <section><div class="history-head"><h2>Tabla de Resultados</h2><span id="count">0 de 10 mediciones</span></div><div class="table-wrap"><table><thead><tr><th>Apert.</th><th>h<sub>acc</sub> (m)</th><th>Q (l/s)</th><th>K</th></tr></thead><tbody id="history"></tbody></table></div></section>
-      <section><div class="history-head"><h2>Curva característica</h2><span>K y caudal vs apertura</span></div><div class="chart-box"><canvas id="chart" width="420" height="320" aria-label="Gráfica del coeficiente y caudal según apertura"></canvas></div></section>
-    </aside>
-  </div>
-</main>
-<section class="print-report" id="printReport" aria-hidden="true"></section>
-<script>
-const $=s=>document.querySelector(s),G=9.81,NU=1.004e-6,PRECISION={flowLs:4,flowM3:4,loss:4,k:4};
-const opening=$('#opening'),scene=$('#scene'),protectedControls=[opening,$('#startBtn'),$('#newBtn'),$('#pumpSwitch')];
-let unlocked=false,running=false,result=null,history=[];
-// Valores aproximados digitalizados de la curva "Corona de aletas · DN 200" suministrada.
-const kByOpening={10:2500,20:400,30:85,40:34,50:15,60:7.5,70:4.2,80:2.7,90:1.8,100:1.3};
-const fmt=(n,d=2)=>n.toLocaleString('es-EC',{minimumFractionDigits:d,maximumFractionDigits:d});
-function setStep(n){document.querySelectorAll('.step').forEach((el,i)=>{el.classList.toggle('active',i===n);el.classList.toggle('done',i<n)})}
-function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>t.classList.remove('show'),2200)}
-function calculate(){const a=+opening.value,D=.2,K=kByOpening[a],qLs=3.2+5.8*Math.pow(a/100,.72),Q=qLs/1000,A=Math.PI*D*D/4,V=Q/A,h=K*V*V/(2*G),Re=V*D/NU;return{a,D,K,qLs,Q,A,V,h,Re}}
-function setNeedles(data=null){if(!data){scene.style.setProperty('--needle-in','145deg');scene.style.setProperty('--needle-out','145deg');scene.style.setProperty('--needle-diff','125deg');return}const base=145+data.qLs*14,drop=Math.min(34,data.h*150),differential=125+Math.min(190,data.h*760);scene.style.setProperty('--needle-in',`${Math.min(315,base+10)}deg`);scene.style.setProperty('--needle-out',`${Math.max(145,base-drop)}deg`);scene.style.setProperty('--needle-diff',`${Math.min(315,differential)}deg`)}
-function updateOpening(){const a=+opening.value;$('#openingLabel').textContent=`${a} %`;$('#openingDisplay').textContent=`${a} %`;$('#valveImage').classList.toggle('throttle',a<50);if(running)stop(false);if(unlocked){$('#statusText').textContent=a===0?'Válvula cerrada':'Apertura configurada';setStep(1)}drawChart()}
-function incrementOpening(){if(!unlocked){showToast('Ingresa el nombre del estudiante para habilitar la válvula');return}const current=+opening.value;if(current>=100){showToast('La válvula ya está completamente abierta');return}opening.value=current+10;updateOpening();showToast(`Apertura aumentada al ${opening.value} %`)}
-function setAccess(ready){unlocked=ready;protectedControls.forEach(el=>el.disabled=!ready);$('#printBtn').disabled=!ready||!history.length;if(ready){$('#statusText').textContent='Selecciona la apertura';setStep(1);showToast('Laboratorio habilitado')}else{$('#statusText').textContent='Ingresa el nombre del estudiante';setStep(0)}}
-function start(){if(running){showToast('La bomba ya se encuentra encendida');return}if(+opening.value===0){showToast('La válvula está cerrada: selecciona una apertura mínima del 10 %');$('#statusText').textContent='Válvula cerrada';setStep(1);return}result=calculate();running=true;scene.classList.add('running');setNeedles(result);$('#pumpStateText').textContent='BOMBA · ON';$('#pumpSwitch').setAttribute('aria-pressed','true');$('#statusText').textContent='Estabilizando el flujo…';setStep(2);$('#startBtn').textContent='■ Apagar bomba';$('#bankRecordBtn').disabled=true;setTimeout(()=>{if(!running)return;$('#flowReading').textContent=`${fmt(result.qLs,PRECISION.flowLs)} l/s`;$('#flowReadingM3').textContent=`${fmt(result.Q,PRECISION.flowM3)} m³/s`;$('#diffReading').textContent=`${fmt(result.h,PRECISION.loss)} mca`;$('#statusText').textContent='Lectura estable';$('#bankRecordBtn').disabled=false;setStep(3);showToast('Lecturas listas: ya puedes grabar los datos')},950)}
-function stop(clear=true){running=false;scene.classList.remove('running');setNeedles();$('#pumpStateText').textContent='BOMBA · OFF';$('#pumpSwitch').setAttribute('aria-pressed','false');$('#startBtn').textContent='▶ Encender bomba';$('#bankRecordBtn').disabled=true;$('#flowReading').textContent='0,0000 l/s';$('#flowReadingM3').textContent='0,0000 m³/s';$('#statusText').textContent=unlocked?'Configura un nuevo ensayo':'Ingresa el nombre del estudiante';if(clear){result=null;$('#diffReading').textContent='— mca'}setStep(unlocked?1:0)}
-function togglePump(){running?stop():start()}
-function record(){if(history.some(r=>r.a===result.a&&r.D===result.D)){showToast('Esta apertura ya fue registrada');return}history.push({...result});history.sort((a,b)=>a.a-b.a);renderHistory();drawChart();$('#printBtn').disabled=false;showToast('Ensayo registrado correctamente')}
-function renderHistory(){const apertures=[10,20,30,40,50,60,70,80,90,100],body=$('#history');body.innerHTML=apertures.map(a=>{const r=history.find(item=>item.a===a);return`<tr><td><b>${a} %</b></td><td>${r?fmt(r.h,PRECISION.loss):'—'}</td><td>${r?fmt(r.qLs,PRECISION.flowLs):'—'}</td><td>${r?fmt(r.K,PRECISION.k):'—'}</td></tr>`}).join('');$('#count').textContent=`${history.length} de 10 mediciones`}
-function drawChart(){const c=$('#chart'),ctx=c.getContext('2d'),w=c.width,h=c.height,p={l:58,r:56,t:31,b:47},plotH=h-p.t-p.b;ctx.clearRect(0,0,w,h);ctx.font='15px system-ui';ctx.fillStyle='#536178';ctx.strokeStyle='#d8e1eb';ctx.lineWidth=1;const kTicks=['10⁴','10³','10²','10¹','10⁰'],qTicks=['10','7,5','5','2,5','0'];for(let i=0;i<5;i++){const y=p.t+plotH*i/4;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillText(kTicks[i],7,y+5);ctx.fillText(qTicks[i],w-42,y+5)}[10,30,50,70,90].forEach(a=>{const x=p.l+(w-p.l-p.r)*(a-10)/90;ctx.fillText(a+'%',x-14,h-15)});ctx.fillStyle='#172033';ctx.font='bold 15px system-ui';ctx.fillText('K (log)',8,19);ctx.fillText('Q (l/s)',w-62,19);const points=history,yK=value=>p.t+plotH*(1-Math.max(0,Math.min(4,Math.log10(value)))/4),yQ=value=>p.t+plotH*(1-value/10);function line(key,color,yFor){ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();points.forEach((r,i)=>{const x=p.l+(w-p.l-p.r)*(r.a-10)/90,y=yFor(r[key]);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();points.forEach(r=>{const x=p.l+(w-p.l-p.r)*(r.a-10)/90,y=yFor(r[key]);ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill()})}line('K','#246bfd',yK);line('qLs','#18a87b',yQ)}
-function resetAll(){if(!confirm('¿Deseas borrar el nombre, los resultados y comenzar nuevamente?'))return;stop();history=[];renderHistory();$('#studentName').value='';opening.value=0;$('#printBtn').disabled=true;setAccess(false);updateOpening();drawChart();showToast('Laboratorio reiniciado')}
-async function printReport(){if(!history.length){showToast('Registra al menos un ensayo');return}drawChart();const chartImage=$('#chart').toDataURL('image/png'),rows=history.map((r,i)=>`<tr><td>${i+1}</td><td>${r.a} %</td><td>${Math.round(r.D*1000)}</td><td>${fmt(r.qLs,4)}</td><td>${fmt(r.V,4)}</td><td>${fmt(r.h,4)}</td><td>${fmt(r.K,4)}</td></tr>`).join(''),avg=history.reduce((s,r)=>s+r.K,0)/history.length,report=$('#printReport');report.innerHTML=`<div class="report-head"><div><h1>Laboratorio de pérdidas en válvula</h1><p>Válvula de paso anular con corona de aletas · Agua a 20 °C</p></div><div><p><b>Estudiante:</b> ${$('#studentName').value}</p><p><b>Fecha:</b> ${new Date().toLocaleDateString('es-EC')}</p></div></div><div class="report-grid"><div class="report-stat"><small>ENSAYOS</small><strong>${history.length}</strong></div><div class="report-stat"><small>DIÁMETRO</small><strong>${Math.round(history[0].D*1000)} mm</strong></div><div class="report-stat"><small>K PROMEDIO</small><strong>${fmt(avg,4)}</strong></div><div class="report-stat"><small>FLUIDO</small><strong>Agua</strong></div></div><section class="report-section"><h2>Banco de prueba de referencia</h2><img class="report-bank" src="banco-pruebas-referencia.png" alt="Banco hidráulico virtual de pérdidas en válvula"><p class="report-caption">Banco hidráulico virtual empleado para la adquisición de datos.</p></section><section class="report-section"><h2>Tabla de datos experimentales</h2><table><thead><tr><th>N.º</th><th>Apertura</th><th>D (mm)</th><th>Q (l/s)</th><th>V (m/s)</th><th>hL (mca)</th><th>K</th></tr></thead><tbody>${rows}</tbody></table></section><section class="report-section report-chart-section"><h2>Gráfica adquirida</h2><img class="report-chart" src="${chartImage}" alt="Curva característica adquirida durante el ensayo"><p class="report-caption">Coeficiente de pérdida K y caudal Q en función de la apertura registrada.</p></section><div class="report-note"><b>Fundamento:</b> Para un accesorio de diámetro Dacc, la pérdida localizada en función del caudal es hacc = 8KQ²/(π²gDacc⁴). Por tanto, K = haccπ²gDacc⁴/(8Q²). Al reducir la apertura aumenta la resistencia de la válvula y, en consecuencia, el coeficiente K.</div><div class="report-sign"><div>Firma del estudiante</div></div>`;report.setAttribute('aria-hidden','false');const images=[...report.querySelectorAll('img')];await Promise.all(images.map(img=>img.complete&&img.naturalWidth?Promise.resolve():new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})})));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));window.print()}
-$('#studentName').addEventListener('input',e=>{const ready=e.target.value.trim().length>=3;if(ready!==unlocked)setAccess(ready)});opening.addEventListener('input',updateOpening);$('#valveImage').addEventListener('click',incrementOpening);$('#startBtn').addEventListener('click',togglePump);$('#pumpSwitch').addEventListener('click',togglePump);$('#newBtn').addEventListener('click',()=>stop());$('#bankRecordBtn').addEventListener('click',()=>{if(result&&running)record()});$('#resetAllBtn').addEventListener('click',resetAll);$('#printBtn').addEventListener('click',printReport);$('#helpBtn').addEventListener('click',()=>alert('1. Escribe tu nombre.\n2. Selecciona una apertura entre 10 % y 100 %.\n3. Enciende la bomba.\n4. Espera la lectura estable.\n5. Graba los datos del ensayo.'));$('#backBtn').addEventListener('click',()=>{if(history.length&&!confirm('Hay mediciones registradas. ¿Deseas salir?'))return;if(window.history.length>1)window.history.back();else window.location.href='../index.html'});
+  html, body { height: 100% !important; overflow: hidden !important; }
+  .app { height: 100% !important; }
+  .scene { min-height: 0 !important; }
+  .rig, .mesa-ensayo, .machine { transform: translateX(-50%) scale(0.65) !important; transform-origin: bottom center !important; }
+  .lab { transform: scale(0.85); transform-origin: top center; }
+});
 renderHistory();drawChart();updateOpening();
 </script>
 </body>
