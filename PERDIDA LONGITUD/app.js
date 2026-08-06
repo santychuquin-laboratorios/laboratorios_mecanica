@@ -106,6 +106,96 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- ELIMINACIÓN DE FONDO DE CUADRÍCULA (TRANSPARENCIA REAL) ---
+    function processTransparency(imgElement) {
+        if (imgElement.dataset.processed === "true") return;
+        imgElement.dataset.processed = "true";
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        const w = imgElement.naturalWidth;
+        const h = imgElement.naturalHeight;
+        if (w === 0 || h === 0) return;
+        
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(imgElement, 0, 0);
+        
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        
+        const visited = new Uint8Array(w * h);
+        const queue = [];
+        
+        // Detecta colores típicos de la cuadrícula de transparencia falsa (blanco o gris claro)
+        function isBgColor(r, g, b) {
+            const isGrayscale = Math.abs(r - g) < 15 && Math.abs(g - b) < 15 && Math.abs(r - b) < 15;
+            if (!isGrayscale) return false;
+            const avg = (r + g + b) / 3;
+            return avg > 170; // Detecta grises por encima del tono de las paredes
+        }
+        
+        // Inicializar cola desde los bordes de la imagen
+        for (let x = 0; x < w; x++) {
+            queue.push(x, 0);
+            queue.push(x, h - 1);
+            visited[x] = 1;
+            visited[x + (h - 1) * w] = 1;
+        }
+        for (let y = 1; y < h - 1; y++) {
+            queue.push(0, y);
+            queue.push(w - 1, y);
+            visited[y * w] = 1;
+            visited[(w - 1) + y * w] = 1;
+        }
+        
+        let head = 0;
+        while (head < queue.length) {
+            const x = queue[head++];
+            const y = queue[head++];
+            const idx = (x + y * w) * 4;
+            
+            const r = data[idx];
+            const g = data[idx + 1];
+            const b = data[idx + 2];
+            
+            if (isBgColor(r, g, b)) {
+                data[idx + 3] = 0; // Transparente
+                
+                const neighbors = [
+                    [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]
+                ];
+                for (let i = 0; i < neighbors.length; i++) {
+                    const nx = neighbors[i][0];
+                    const ny = neighbors[i][1];
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                        const nIdx = nx + ny * w;
+                        if (!visited[nIdx]) {
+                            visited[nIdx] = 1;
+                            queue.push(nx, ny);
+                        }
+                    }
+                }
+            }
+        }
+        
+        ctx.putImageData(imgData, 0, 0);
+        imgElement.src = canvas.toDataURL("image/png");
+    }
+
+    // Cargar imagen y remover fondo
+    const cfdImg = document.querySelector("#pipe-view img");
+    if (cfdImg) {
+        if (cfdImg.complete) {
+            processTransparency(cfdImg);
+        } else {
+            cfdImg.addEventListener("load", () => {
+                processTransparency(cfdImg);
+            });
+        }
+    }
+
     // Carga inicial de datos persistidos y primer cálculo
     loadData();
     calculate();
