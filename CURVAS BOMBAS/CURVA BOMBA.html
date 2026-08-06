@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio virtual: Curvas de Bombas</title>
+<style>
+:root{--ink:#14213d;--muted:#61708b;--paper:#f7f9fc;--card:#fff;--line:#dfe6ef;--navy:#0d2444;--blue:#246bfd;--cyan:#38bdf8;--orange:#f47b20;--green:#18a87b;--red:#ef4444;--shadow:0 18px 50px rgba(20,33,61,.12);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#e6f4ff 0,transparent 32%),var(--paper)}
+button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;margin:auto;padding:10px 22px;height:100vh;display:flex;flex-direction:column;}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px}.brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,var(--blue),#163ea4);display:grid;place-items:center;color:#fff;box-shadow:0 10px 26px rgba(36,107,253,.28)}.logo svg{width:25px}.brand h1{font-size:1.12rem;margin:0}.brand p{font-size:.8rem;color:var(--muted);margin:3px 0 0}.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--muted);padding:8px 12px;border-radius:999px;font-size:.78rem}.icon-btn{width:40px;height:40px;border:1px solid var(--line);background:#fff;border-radius:12px;color:var(--ink);display:grid;place-items:center}.icon-btn:hover{border-color:#b9c7da}.grid{display:grid;grid-template-columns:minmax(230px,285px) minmax(460px,1fr);gap:15px;flex:1;min-height:0;}.panel{background:rgba(255,255,255,.92);border:1px solid rgba(214,224,238,.9);border-radius:20px;box-shadow:0 7px 28px rgba(20,33,61,.06);min-height:0;overflow:hidden;}.sidebar{padding:15px;display:flex;flex-direction:column;gap:5px}.eyebrow{color:var(--blue);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.67rem}.sidebar h2{font-size:.95rem;margin:2px 0}.copy{font-size:.75rem;color:var(--muted);line-height:1.4;margin:0}.step-list{display:flex;flex-direction:column;gap:8px}.step{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px;border-radius:12px;color:var(--muted);font-size:.78rem;line-height:1.3}.step-num{width:27px;height:27px;border-radius:50%;background:#edf1f7;display:grid;place-items:center;font-weight:800}.step.active{background:#edf4ff;color:var(--ink)}.step.active .step-num{background:var(--blue);color:#fff}.step.done .step-num{background:#dcf8ef;color:var(--green)}.control label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;font-weight:750;margin-bottom:4px}.control label span{color:var(--blue)}select,input[type=number]{width:100%;border:1px solid var(--line);border-radius:11px;padding:6px 10px;background:#fff;color:var(--ink);outline:none}select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,107,253,.1)}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;gap:7px}.primary{background:var(--blue);color:#fff;box-shadow:0 9px 18px rgba(36,107,253,.2)}.secondary{background:#eef3fa;color:var(--ink)}.lab{overflow:hidden;position:relative;display:flex;flex-direction:column}.lab-head{padding:12px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.lab-head h2{font-size:.96rem;margin:0}.scene{position:relative;flex:1;background:linear-gradient(#f9fcff,#eef5fb);overflow:hidden;padding: 10px;}.scene:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(63,93,132,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(63,93,132,.035) 1px,transparent 1px);background-size:24px 24px}
+.student-field{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:.72rem;font-weight:800;color:var(--muted)}.student-field input{width:230px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 11px;outline:none}.student-field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,107,253,.1)}button:disabled,select:disabled,input:disabled{cursor:not-allowed;opacity:.48}.reset-all{color:var(--green);background:#edf8f4;border-color:#b9dace;font-weight:800}.reset-all:hover{background:#dff5ec;border-color:#89c9b4}
+@media(max-width:950px){.student-field{order:3;width:100%;margin:4px 0 0}.student-field input{flex:1;width:auto}.topbar{flex-wrap:wrap}.grid{grid-template-columns:1fr}}
+
+@media print {
+    @page { size: A4 landscape; margin: 16mm; }
+    html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
+    .app { display: none !important; }
+    .print-report { display: block !important; color: #172033; font-family: Arial, sans-serif; }
+    .print-report .report-head { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 14px; border-bottom: 3px solid var(--blue); }
+    .print-report h1 { font-size: 22px; margin: 0 0 5px; }
+    .print-report p { font-size: 11px; line-height: 1.5; margin: 3px 0; }
+    .print-report .report-meta { text-align: right; }
+}
+
+/* Estilos del botón imprimir */
+.print-btn {
+    border: 1px solid #b9dace;
+    background: #edf8f4;
+    color: #11765a;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+.print-btn:hover {
+    background: #dff5ec;
+}
+
+/* Estilos específicos para inputs de bombas */
+.pump-group { margin-bottom: 5px; }
+.pump-group label {
+    font-size: 0.76rem;
+    font-weight: 750;
+    margin-bottom: 4px;
+    display: block;
+}
+.inputs-inline {
+    display: flex;
+    gap: 0.5rem;
+}
+.inputs-inline input {
+    width: 33%;
+    font-size: 0.8rem;
+    padding: 6px 8px;
+}
+</style>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+        <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+        </div>
+        <div>
+            <h1><strong>CURVAS DE BOMBAS</strong></h1>
+            <p>Análisis de 5 bombas y punto de operación</p>
+        </div>
+    </div>
+    <label class="student-field" for="studentName"><span>Alumno</span><input id="studentName" type="text" maxlength="80" autocomplete="name" placeholder="Ingrese su nombre"></label>
+    <div class="top-actions">
+        <a href="../index.html" class="pill" style="text-decoration:none; color:var(--ink); display:flex; align-items:center; gap:5px; font-weight:700;">⬅ Volver</a>
+    </div>
+  </header>
+  
+  <div class="grid">
+    <!-- Panel Izquierdo: Controles -->
+    <aside class="panel sidebar">
+      <section>
+          <div class="eyebrow">Configuración</div>
+          <h2>Parámetros del Sistema</h2>
+      </section>
+      
+      <div class="pump-group" style="margin-top: 5px;">
+          <label style="color: var(--blue);">Curva Resistente (Hr = Hg + h<sub>pérdidas</sub> · Q²):</label>
+          <div class="inputs-inline" style="justify-content: space-between; align-items: flex-end;">
+              <div class="control" style="width: 48%; margin-bottom: 0;">
+                  <label style="font-size: 0.65rem;">Hg (Desnivel, m)</label>
+                  <input type="number" id="sys-hg" step="1" value="52" min="0" style="width: 100%;">
+              </div>
+              <div class="control" style="width: 48%; margin-bottom: 0;">
+                  <label style="font-size: 0.65rem;">h<sub>pérdidas</sub> (para Q en m³/s)</label>
+                  <input type="number" id="sys-k" step="1" value="30132" min="0" style="width: 100%;">
+              </div>
+          </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--line); margin: 5px 0;">
+
+      <section style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <div>
+              <h2>Parámetros de las Bombas</h2>
+              <p class="copy">Ecuación: HB = A + BQ + CQ² <br>(para Q en m³/s)</p>
+          </div>
+          <div>
+              <button id="clear-btn" class="pill" style="border: 1px solid var(--red, #e53e3e); color: var(--red, #e53e3e); font-weight: 700; background: #fff;">🗑️ Limpiar</button>
+          </div>
+      </section>
+      
+      <div class="pump-inputs-container">
+          <!-- Bomba 1 -->
+          <div class="pump-group">
+              <label style="color: #e53e3e;">Bomba 1:</label>
+              <div class="inputs-inline">
+                  <input type="number" id="b1-a" value="30" step="1" title="Valor A">
+                  <input type="number" id="b1-b" value="0" step="0.1" title="Valor B">
+                  <input type="number" id="b1-c" value="-15000" step="100" title="Valor C">
+              </div>
+          </div>
+          <!-- Bomba 2 -->
+          <div class="pump-group">
+              <label style="color: #dd6b20;">Bomba 2:</label>
+              <div class="inputs-inline">
+                  <input type="number" id="b2-a" value="35" step="1" title="Valor A">
+                  <input type="number" id="b2-b" value="0" step="0.1" title="Valor B">
+                  <input type="number" id="b2-c" value="-18000" step="100" title="Valor C">
+              </div>
+          </div>
+          <!-- Bomba 3 -->
+          <div class="pump-group">
+              <label style="color: #38a169;">Bomba 3:</label>
+              <div class="inputs-inline">
+                  <input type="number" id="b3-a" value="40" step="1" title="Valor A">
+                  <input type="number" id="b3-b" value="0" step="0.1" title="Valor B">
+                  <input type="number" id="b3-c" value="-22000" step="100" title="Valor C">
+              </div>
+          </div>
+          <!-- Bomba 4 -->
+          <div class="pump-group">
+              <label style="color: #3182ce;">Bomba 4:</label>
+              <div class="inputs-inline">
+                  <input type="number" id="b4-a" value="45" step="1" title="Valor A">
+                  <input type="number" id="b4-b" value="0" step="0.1" title="Valor B">
+                  <input type="number" id="b4-c" value="-25000" step="100" title="Valor C">
+              </div>
+          </div>
+          <!-- Bomba 5 -->
+          <div class="pump-group">
+              <label style="color: #805ad5;">Bomba 5:</label>
+              <div class="inputs-inline">
+                  <input type="number" id="b5-a" value="50" step="1" title="Valor A">
+                  <input type="number" id="b5-b" value="0" step="0.1" title="Valor B">
+                  <input type="number" id="b5-c" value="-30000" step="100" title="Valor C">
+              </div>
+          </div>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--line); margin: 5px 0;">
+      
+      <div class="control">
+          <label for="flow-rate">Caudal de funcionamiento (L/s): <span id="res-q">15.0</span></label>
+          <input type="number" id="flow-rate" step="0.5" value="15" min="0" max="40">
+      </div>
+    </aside>
+
+    <!-- Panel Central: Gráfica -->
+    <div class="panel lab">
+        <div class="lab-head">
+            <h2>Análisis Gráfico</h2>
+            <button class="print-btn" onclick="prepararImpresion()">🖨️ Imprimir PDF</button>
+        </div>
+        
+        <div class="scene" style="display: flex; flex-direction: column;">
+            <div style="flex: 1; min-height: 400px; position: relative;">
+                <canvas id="pumpChart"></canvas>
+            </div>
+        </div>
+    </div>
+  </div>
+</main>
+
+<div class="print-report" style="display:none;">
+   <div class="report-head">
+      <div>
+         <h1>Laboratorio de Fluidos: CURVAS DE BOMBAS</h1>
+         <p>Reporte de Análisis Gráfico</p>
+      </div>
+      <div class="report-meta">
+         <p><strong>Alumno:</strong> <span id="print-student"></span></p>
+         <p><strong>Fecha:</strong> <span id="print-date"></span></p>
+      </div>
+   </div>
+   <div style="margin-top: 20px; text-align: center;">
+      <img id="print-canvas-img" style="max-width: 100%; height: auto; border: 1px solid #d8e1eb; border-radius: 8px;">
+   </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+    function prepararImpresion() {
+        document.getElementById('print-student').innerText = document.getElementById('studentName').value || '_______________________';
+        document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+        
+        // Copiar la gráfica a una imagen
+        const canvas = document.getElementById('pumpChart');
+        if (canvas) {
+            document.getElementById('print-canvas-img').src = canvas.toDataURL('image/png', 1.0);
+        }
+        
+        // Esperar un instante para que el navegador termine de cargar la imagen base64 antes de imprimir
+        setTimeout(() => {
+            window.print();
+        }, 150);
+    }
+    
+    // Como respaldo en caso de que utilicen Ctrl+P
+    window.addEventListener('beforeprint', () => {
+        document.getElementById('print-student').innerText = document.getElementById('studentName').value || '_______________________';
+        document.getElementById('print-date').innerText = new Date().toLocaleDateString();
+        const canvas = document.getElementById('pumpChart');
+        if (canvas) {
+            document.getElementById('print-canvas-img').src = canvas.toDataURL('image/png', 1.0);
+        }
+    });
+</script>
+</body>
+</html>
