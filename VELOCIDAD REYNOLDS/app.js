@@ -61,19 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let currentRe = 0; // Para la animación
     let currentV = 0;  // Para la velocidad de la animación
-    const STORAGE_KEY = "virtualab_reynolds_data";
+    const STORAGE_KEY = "virtualab_shared_lab_data";
 
     function saveData() {
-        const data = {
-            inQLs: inQLs.value,
-            inQm3s: inQm3s.value,
-            inDmm: inDmm.value,
-            inDm: inDm.value,
-            inE: inE.value,
-            inTemp: inTemp ? inTemp.value : "",
-            inNu: inNu.value,
-            materialSelect: materialSelect ? materialSelect.value : "custom"
-        };
+        let data = {};
+        const existing = localStorage.getItem(STORAGE_KEY);
+        if (existing) {
+            try { data = JSON.parse(existing); } catch(e) {}
+        }
+        data.inQLs = inQLs.value;
+        data.inQm3s = inQm3s.value;
+        data.inDmm = inDmm.value;
+        data.inDm = inDm.value;
+        data.inE = inE.value;
+        data.inTemp = inTemp ? inTemp.value : "";
+        data.inNu = inNu.value;
+        data.materialSelect = materialSelect ? materialSelect.value : "custom";
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
