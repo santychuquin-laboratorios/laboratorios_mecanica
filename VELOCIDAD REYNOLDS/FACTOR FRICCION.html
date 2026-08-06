@@ -256,16 +256,16 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
         
         <div class="scene">
             <div class="cards-container">
-                <!-- Tarjeta Factor Fricción -->
-                <div class="result-card card-f">
-                    <div class="result-title">Factor de Fricción (f)</div>
-                    <div class="formula-box" id="formula-f">
-                        f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>
+                <!-- Tarjeta Velocidad -->
+                <div class="result-card card-v">
+                    <div class="result-title">Velocidad del Fluido (V)</div>
+                    <div class="formula-box">
+                        V = <span class="fraction"><span class="numerator">4 · Q</span><span class="denominator">π · D<sup>2</sup></span></span>
                     </div>
-                    <div class="result-value" style="color: var(--orange);">
-                        <span id="out-f">0,0000</span>
+                    <div class="result-value">
+                        <span id="out-v">0,0000</span>
+                        <span class="result-unit">m/s</span>
                     </div>
-                    <p class="copy" style="margin-top: 15px; font-size: 0.85rem;" id="out-eq">Ecuación de Swamee-Jain</p>
                 </div>
 
                 <!-- Tarjeta Reynolds -->
@@ -280,18 +280,17 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                     <div id="out-status" class="status-badge status-laminar">Flujo</div>
                 </div>
 
-                <!-- Tarjeta Velocidad -->
-                <div class="result-card card-v">
-                    <div class="result-title">Velocidad del Fluido (V)</div>
-                    <div class="formula-box">
-                        V = <span class="fraction"><span class="numerator">4 · Q</span><span class="denominator">π · D<sup>2</sup></span></span>
+                <!-- Tarjeta Factor Fricción -->
+                <div class="result-card card-f">
+                    <div class="result-title">Factor de Fricción (f)</div>
+                    <div class="formula-box" id="formula-f">
+                        f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>
                     </div>
-                    <div class="result-value">
-                        <span id="out-v">0.00</span>
-                        <span class="result-unit">m/s</span>
+                    <div class="result-value" style="color: var(--orange);">
+                        <span id="out-f">0,0000</span>
                     </div>
+                    <p class="copy" style="margin-top: 15px; font-size: 0.85rem;" id="out-eq">Ecuación de Swamee-Jain</p>
                 </div>
-
             </div>
 
             <!-- Contenedor de Animación del Flujo -->
