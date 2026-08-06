@@ -182,6 +182,13 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
     border-color: var(--green) !important;
     box-shadow: 0 0 0 3px rgba(24, 168, 123, 0.15) !important;
 }
+#in-f {
+    transition: all 0.2s ease;
+}
+#in-f:focus {
+    border-color: var(--orange) !important;
+    box-shadow: 0 0 0 3px rgba(244, 123, 32, 0.15) !important;
+}
 </style>
 </head>
 <body>
@@ -241,34 +248,9 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
           </div>
       </div>
 
-      <div class="control">
-          <label for="material-select">Material de Tubería</label>
-          <select id="material-select">
-              <option value="0.0000003">PLÁSTICO (3,0 x 10⁻⁷ m)</option>
-              <option value="0.0000015" selected>COBRE, LATÓN (1,5 x 10⁻⁶ m)</option>
-              <option value="0.000046">ACERO COMERCIAL (4,6 x 10⁻⁵ m)</option>
-              <option value="0.00036">FUNDICIÓN DÚCTIL (3,6 x 10⁻⁴ m)</option>
-              <option value="0.00015">HIERRO GALVANIZADO (1,5 x 10⁻⁴ m)</option>
-              <option value="0.00012">HIERRO DÚCTIL RECUBIERTO (1,2 x 10⁻⁴ m)</option>
-              <option value="0.00024">H. DÚCTIL NO RECUBIERTO (2,4 x 10⁻⁴ m)</option>
-              <option value="0.00012">CONCRETO (1,2 x 10⁻⁴ m)</option>
-              <option value="custom">Personalizado...</option>
-          </select>
-      </div>
-
-      <div class="control">
-          <label for="in-e">Rugosidad Absoluta (ε) <span>m</span></label>
-          <input type="number" id="in-e" step="0.0000001" value="0.0000015" min="0">
-      </div>
-
-      <div class="control">
-          <label for="in-temp">Temperatura del Agua (°C) <span>opcional</span></label>
-          <input type="number" id="in-temp" step="1" placeholder="Ej: 20" min="0" max="100">
-      </div>
-
-      <div class="control">
-          <label for="in-nu">Viscosidad Cinemática (ν) <span>m²/s</span></label>
-          <input type="text" id="in-nu" value="1,0200e-6">
+      <div class="control" style="border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px;">
+          <label for="in-f" style="color: var(--orange); font-weight: 800;">Factor de Fricción (f)</label>
+          <input type="number" id="in-f" step="0.0001" value="0.0200" min="0.0001" max="0.5" style="border-color: #ffd1a9;">
       </div>
 
       <div class="control" style="border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px;">
@@ -302,13 +284,13 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                 <!-- Tarjeta Factor Fricción f -->
                 <div class="result-card card-f">
                     <div class="result-title">Factor de Fricción (f)</div>
-                    <div class="formula-box" id="formula-f">
-                        f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>
+                    <div class="formula-box">
+                        f = f<sub>ingresado</sub>
                     </div>
                     <div class="result-value">
-                        <span id="out-f">0,0000</span>
+                        <span id="out-f">0,0200</span>
                     </div>
-                    <p class="copy" style="font-size: 0.78rem; margin-top: 5px;" id="out-eq">Ecuación de Swamee-Jain</p>
+                    <p class="copy" style="font-size: 0.78rem; margin-top: 5px;" id="out-eq">Valor de Entrada</p>
                 </div>
 
                 <!-- Tarjeta Reynolds -->

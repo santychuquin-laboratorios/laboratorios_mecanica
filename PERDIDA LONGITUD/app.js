@@ -5,51 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inDmm = document.getElementById("in-d-mm");
     const inDm = document.getElementById("in-d-m");
     const inL = document.getElementById("in-l");
-    const inE = document.getElementById("in-e");
-    const inTemp = document.getElementById("in-temp");
-    const inNu = document.getElementById("in-nu");
-    const materialSelect = document.getElementById("material-select");
-
-    // Datos de agua para viscosidad cinemática
-    const waterProperties = [
-        { t: 0, nu: 1.75e-6 },
-        { t: 5, nu: 1.52e-6 },
-        { t: 10, nu: 1.30e-6 },
-        { t: 15, nu: 1.15e-6 },
-        { t: 20, nu: 1.02e-6 },
-        { t: 25, nu: 8.94e-7 },
-        { t: 30, nu: 8.03e-7 },
-        { t: 35, nu: 7.22e-7 },
-        { t: 40, nu: 6.56e-7 },
-        { t: 45, nu: 6.00e-7 },
-        { t: 50, nu: 5.48e-7 },
-        { t: 55, nu: 5.05e-7 },
-        { t: 60, nu: 4.67e-7 },
-        { t: 65, nu: 4.39e-7 },
-        { t: 70, nu: 4.11e-7 },
-        { t: 75, nu: 3.83e-7 },
-        { t: 80, nu: 3.60e-7 },
-        { t: 85, nu: 3.41e-7 },
-        { t: 90, nu: 3.22e-7 },
-        { t: 95, nu: 3.04e-7 },
-        { t: 100, nu: 2.94e-7 }
-    ];
-
-    function getViscosity(temp) {
-        if (temp <= 0) return waterProperties[0].nu;
-        if (temp >= 100) return waterProperties[waterProperties.length - 1].nu;
-        
-        for (let i = 0; i < waterProperties.length - 1; i++) {
-            if (temp >= waterProperties[i].t && temp <= waterProperties[i+1].t) {
-                const t1 = waterProperties[i].t;
-                const nu1 = waterProperties[i].nu;
-                const t2 = waterProperties[i+1].t;
-                const nu2 = waterProperties[i+1].nu;
-                return nu1 + ((temp - t1) / (t2 - t1)) * (nu2 - nu1);
-            }
-        }
-        return 1.02e-6;
-    }
+    const inF = document.getElementById("in-f");
 
     // Outputs
     const outHf = document.getElementById("out-hf");
@@ -58,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const outRe = document.getElementById("out-re");
     const outStatus = document.getElementById("out-status");
     const outEq = document.getElementById("out-eq");
-    const formulaF = document.getElementById("formula-f");
     const cardRe = document.querySelector(".card-re");
     const cardHf = document.querySelector(".card-hf");
 
@@ -80,10 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             inDmm: inDmm.value,
             inDm: inDm.value,
             inL: inL.value,
-            inE: inE.value,
-            inTemp: inTemp ? inTemp.value : "",
-            inNu: inNu.value,
-            materialSelect: materialSelect ? materialSelect.value : "custom"
+            inF: inF.value
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
@@ -98,10 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(parsed.inDmm !== undefined) inDmm.value = parsed.inDmm;
                 if(parsed.inDm !== undefined) inDm.value = parsed.inDm;
                 if(parsed.inL !== undefined) inL.value = parsed.inL;
-                if(parsed.inE !== undefined) inE.value = parsed.inE;
-                if(parsed.inTemp !== undefined && inTemp) inTemp.value = parsed.inTemp;
-                if(parsed.inNu !== undefined) inNu.value = parsed.inNu.toString().replace('.', ',');
-                if(parsed.materialSelect !== undefined && materialSelect) materialSelect.value = parsed.materialSelect;
+                if(parsed.inF !== undefined) inF.value = parsed.inF;
             } catch (e) {
                 console.error("Error cargando datos guardados", e);
             }
@@ -114,17 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const q_Ls = parseFloat(inQLs.value) || 0;
         const d_mm = parseFloat(inDmm.value) || 0;
         const l_m = parseFloat(inL.value) || 0;
-        const e_m_input = parseFloat(inE.value) || 0;
-        const nu_m2s_input = parseFloat(inNu.value.replace(',', '.')) || 0;
+        const f_val = parseFloat(inF.value.toString().replace(',', '.')) || 0;
 
-        if (d_mm <= 0 || nu_m2s_input <= 0 || q_Ls === 0 || l_m <= 0) {
+        if (d_mm <= 0 || f_val <= 0 || q_Ls === 0 || l_m <= 0) {
             outHf.innerText = "0,0000";
             outF.innerText = "0,0000";
             outV.innerText = "0,0000";
             outRe.innerText = "0";
             outStatus.innerText = "Sin flujo";
             outStatus.className = "status-badge status-laminar";
-            outEq.innerText = "-";
             currentRe = 0;
             currentV = 0;
             currentHf = 0;
@@ -133,59 +80,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 cardRe.style.background = "#f8fafc";
                 cardRe.style.borderColor = "#cbd5e1";
             }
-            if (formulaF) {
-                formulaF.innerHTML = `f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>`;
-            }
             updateSimulation(0);
             return;
         }
 
-        // Conversiones
+        // Conversiones y constantes
         const q_m3s = q_Ls / 1000;
         const d_m = d_mm / 1000;
-        const e_m = e_m_input;
-        const nu_m2s = nu_m2s_input;
+        const nu_m2s = 1.02e-6; // Viscosidad constante del agua a 20°C bajo el capó
 
         // Área y Velocidad
         const area = (Math.PI * Math.pow(d_m, 2)) / 4;
         const v = q_m3s / area;
         currentV = v;
 
-        // Reynolds
+        // Reynolds (para clasificación visual y animaciones)
         const re = (v * d_m) / nu_m2s;
         currentRe = re;
 
-        // Factor de Fricción
-        let f = 0;
-        let eqName = "";
-
-        if (re < 2000) {
-            // Laminar
-            f = 64 / re;
-            eqName = "Ecuación de Poiseuille (Laminar)";
-            if (formulaF) {
-                formulaF.innerHTML = `f = <span class="fraction"><span class="numerator">64</span><span class="denominator">Re</span></span>`;
-            }
-        } else {
-            // Turbulento/Transición (Swamee-Jain)
-            const term1 = e_m / (3.7 * d_m);
-            const term2 = 5.74 / Math.pow(re, 0.9);
-            const logTerm = Math.log10(term1 + term2);
-            f = 0.25 / Math.pow(logTerm, 2);
-            eqName = "Ecuación de Swamee-Jain";
-            if (formulaF) {
-                formulaF.innerHTML = `f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>`;
-            }
-        }
-
         // Pérdida de Carga Primaria (Darcy-Weisbach)
         const g = 9.81;
-        const hf = f * (l_m / d_m) * (Math.pow(v, 2) / (2 * g));
+        const hf = f_val * (l_m / d_m) * (Math.pow(v, 2) / (2 * g));
         currentHf = hf;
 
         // Actualizar visualizaciones numéricas
         outHf.innerText = hf.toFixed(4).replace('.', ',');
-        outF.innerText = f.toFixed(4).replace('.', ',');
+        outF.innerText = f_val.toFixed(4).replace('.', ',');
         outV.innerText = v.toFixed(4).replace('.', ',');
         outRe.innerText = Number.isInteger(re) ? re.toString() : re.toFixed(3).replace('.', ',');
 
@@ -213,7 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        outEq.innerText = eqName;
         updateSimulation(hf);
     }
 
@@ -239,17 +158,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Event listeners
-    const inputs = [inL, inE, inNu];
+    const inputs = [inL, inF];
     inputs.forEach(input => {
-        input.addEventListener("input", () => {
-            if (input === inE && materialSelect) {
-                materialSelect.value = "custom";
-            }
-            if (input === inNu && inTemp) {
-                inTemp.value = ""; 
-            }
-            calculate();
-        });
+        if (input) {
+            input.addEventListener("input", () => {
+                calculate();
+            });
+        }
     });
 
     if (inQLs && inQm3s) {
@@ -275,26 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const val = parseFloat(inDm.value) || 0;
             inDmm.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
-        });
-    }
-
-    if (inTemp) {
-        inTemp.addEventListener("input", () => {
-            if (inTemp.value !== "") {
-                const t = parseFloat(inTemp.value);
-                const nu = getViscosity(t);
-                inNu.value = nu.toExponential(4).replace('.', ',');
-                calculate();
-            }
-        });
-    }
-
-    if (materialSelect) {
-        materialSelect.addEventListener("change", () => {
-            if (materialSelect.value !== "custom") {
-                inE.value = materialSelect.value;
-                calculate();
-            }
         });
     }
 
