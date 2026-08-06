@@ -267,10 +267,10 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
         </div>
         
         <div class="scene">
-            <div class="cards-container">
+            <div class="cards-container" style="display: block; text-align: center;">
                 
                 <!-- Tarjeta Pérdidas hLT -->
-                <div class="result-card card-hf">
+                <div class="result-card card-hf" style="max-width: 500px; margin: 0 auto 15px auto; display: flex;">
                     <div class="result-title">Pérdida por Fricción (h<sub>LT</sub>)</div>
                     <div class="formula-box" style="font-size: 0.95rem;">
                         h<sub>LT</sub> = <span class="fraction"><span class="numerator">8 · f · L · Q<sup>2</sup></span><span class="denominator">π<sup>2</sup> · g · D<sup>5</sup></span></span>
@@ -278,42 +278,6 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                     <div class="result-value">
                         <span id="out-hf">0,0000</span>
                         <span class="result-unit">m</span>
-                    </div>
-                </div>
-
-                <!-- Tarjeta Factor Fricción f -->
-                <div class="result-card card-f">
-                    <div class="result-title">Factor de Fricción (f)</div>
-                    <div class="formula-box">
-                        f = f<sub>ingresado</sub>
-                    </div>
-                    <div class="result-value">
-                        <span id="out-f">0,0200</span>
-                    </div>
-                    <p class="copy" style="font-size: 0.78rem; margin-top: 5px;" id="out-eq">Valor de Entrada</p>
-                </div>
-
-                <!-- Tarjeta Reynolds -->
-                <div class="result-card card-re">
-                    <div class="result-title">Número de Reynolds (Re)</div>
-                    <div class="formula-box">
-                        Re = <span class="fraction"><span class="numerator">V · D</span><span class="denominator">ν</span></span>
-                    </div>
-                    <div class="result-value">
-                        <span id="out-re">0</span>
-                    </div>
-                    <div id="out-status" class="status-badge status-laminar">Flujo</div>
-                </div>
-
-                <!-- Tarjeta Velocidad -->
-                <div class="result-card card-v">
-                    <div class="result-title">Velocidad del Fluido (V)</div>
-                    <div class="formula-box">
-                        V = <span class="fraction"><span class="numerator">4 · Q</span><span class="denominator">π · D<sup>2</sup></span></span>
-                    </div>
-                    <div class="result-value">
-                        <span id="out-v">0,0000</span>
-                        <span class="result-unit">m/s</span>
                     </div>
                 </div>
 

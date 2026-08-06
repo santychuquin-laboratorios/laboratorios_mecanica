@@ -9,13 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Outputs
     const outHf = document.getElementById("out-hf");
-    const outF = document.getElementById("out-f");
-    const outV = document.getElementById("out-v");
-    const outRe = document.getElementById("out-re");
-    const outStatus = document.getElementById("out-status");
-    const outEq = document.getElementById("out-eq");
-    const cardRe = document.querySelector(".card-re");
-    const cardHf = document.querySelector(".card-hf");
 
     // SVG Simulation Elements
     const hglLine = document.getElementById("hgl-line");
@@ -67,19 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (d_mm <= 0 || f_val <= 0 || q_Ls === 0 || l_m <= 0) {
             outHf.innerText = "0,0000";
-            outF.innerText = "0,0000";
-            outV.innerText = "0,0000";
-            outRe.innerText = "0";
-            outStatus.innerText = "Sin flujo";
-            outStatus.className = "status-badge status-laminar";
             currentRe = 0;
             currentV = 0;
             currentHf = 0;
-
-            if (cardRe) {
-                cardRe.style.background = "#f8fafc";
-                cardRe.style.borderColor = "#cbd5e1";
-            }
             updateSimulation(0);
             return;
         }
@@ -105,33 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Actualizar visualizaciones numéricas
         outHf.innerText = hf.toFixed(4).replace('.', ',');
-        outF.innerText = f_val.toFixed(4).replace('.', ',');
-        outV.innerText = v.toFixed(4).replace('.', ',');
-        outRe.innerText = Number.isInteger(re) ? re.toString() : re.toFixed(3).replace('.', ',');
-
-        // Actualizar tarjeta Reynolds
-        if (re < 2000) {
-            outStatus.innerText = "Flujo Laminar";
-            outStatus.className = "status-badge status-laminar";
-            if (cardRe) {
-                cardRe.style.background = "#f0fdf4"; 
-                cardRe.style.borderColor = "#a3e2bb";
-            }
-        } else if (re <= 4000) {
-            outStatus.innerText = "Flujo en Transición";
-            outStatus.className = "status-badge status-transition";
-            if (cardRe) {
-                cardRe.style.background = "#fff7ed"; 
-                cardRe.style.borderColor = "#ffd1a9";
-            }
-        } else {
-            outStatus.innerText = "Flujo Turbulento";
-            outStatus.className = "status-badge status-turbulent";
-            if (cardRe) {
-                cardRe.style.background = "#fef2f2"; 
-                cardRe.style.borderColor = "#fca5a5";
-            }
-        }
 
         updateSimulation(hf);
     }
