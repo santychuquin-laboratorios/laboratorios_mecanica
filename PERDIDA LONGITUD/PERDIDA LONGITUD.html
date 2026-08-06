@@ -283,42 +283,10 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
 
             </div>
 
-            <!-- Contenedor de Animación del Flujo con Gradiente Hidráulico -->
+            <!-- Contenedor de Animación del Flujo con CFD -->
             <div class="animation-panel">
-               <div class="result-title">Simulación de Gradiente Hidráulico y Pérdidas (Tiempo Real)</div>
-               <div class="pipe-view" id="pipe-view">
-                  <!-- SVG dinámico que representa la caída de carga hf y las líneas H1 y H2 -->
-                  <svg id="simulation-svg" viewBox="0 0 800 180" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;">
-                      <!-- Tubo principal transparente de extremo a extremo -->
-                      <rect x="-10" y="110" width="820" height="40" fill="rgba(255, 255, 255, 0.12)" stroke="rgba(203, 213, 225, 0.5)" stroke-width="3"/>
-                      
-                      <!-- Piezómetros verticales -->
-                      <!-- Entrada -->
-                      <line x1="120" y1="20" x2="120" y2="110" stroke="rgba(148, 163, 184, 0.7)" stroke-width="4"/>
-                      <rect x="115" y="20" width="10" height="90" fill="rgba(255, 255, 255, 0.1)"/>
-                      
-                      <!-- Salida -->
-                      <line x1="680" y1="20" x2="680" y2="110" stroke="rgba(148, 163, 184, 0.7)" stroke-width="4"/>
-                      <rect x="675" y="20" width="10" height="90" fill="rgba(255, 255, 255, 0.1)"/>
-                      
-                      <!-- Línea de Gradiente Hidráulico (LGL / HGL) -->
-                      <line id="hgl-line" x1="120" y1="40" x2="680" y2="40" stroke="var(--red)" stroke-width="3" stroke-dasharray="4 4"/>
-                      
-                      <!-- Indicador de altura del agua en la entrada -->
-                      <line id="water-in" x1="110" y1="40" x2="130" y2="40" stroke="var(--blue)" stroke-width="5"/>
-                      
-                      <!-- Indicador de altura del agua en la salida -->
-                      <line id="water-out" x1="670" y1="40" x2="690" y2="40" stroke="var(--blue)" stroke-width="5"/>
-                      
-                      <!-- Etiquetas de energía piezométrica -->
-                      <text x="120" y="14" font-size="11" text-anchor="middle" fill="#64748b" font-weight="900" font-family="Inter, sans-serif">H₁</text>
-                      <text x="680" y="14" font-size="11" text-anchor="middle" fill="#64748b" font-weight="900" font-family="Inter, sans-serif">H₂</text>
-                      
-                      <!-- Letrero de pérdida de carga en el centro -->
-                      <rect id="hf-bg" x="350" y="20" width="100" height="22" rx="6" fill="rgba(240, 253, 244, 0.95)" stroke="var(--green)" stroke-width="1"/>
-                      <text id="hf-text" x="400" y="35" font-size="11" text-anchor="middle" fill="var(--green)" font-weight="900" font-family="Inter, sans-serif">hLT: 0,0000 m</text>
-                  </svg>
-                  <!-- Las partículas de agua fluirán de izquierda a derecha en la franja y=110 a y=150 -->
+               <div class="pipe-view" id="pipe-view" style="position: relative; height: 220px; background: #0f172a; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--line);">
+                  <canvas id="cfd-canvas" width="800" height="220" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;"></canvas>
                </div>
             </div>
 
