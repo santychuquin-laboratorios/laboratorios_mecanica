@@ -235,11 +235,6 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
       </div>
 
       <div class="control">
-          <label for="in-l">Longitud de Tubería (L) <span>m</span></label>
-          <input type="number" id="in-l" step="1" value="50" min="0.1">
-      </div>
-
-      <div class="control">
           <label for="material-select">Material de Tubería</label>
           <select id="material-select">
               <option value="0.0000003">PLÁSTICO (3,0 x 10⁻⁷ m)</option>
@@ -255,18 +250,29 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
       </div>
 
       <div class="control">
-          <label for="in-e">Rugosidad Absoluta (ε) <span>m</span></label>
-          <input type="number" id="in-e" step="0.0000001" value="0.0000015" min="0">
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label for="in-l">Longitud (L) <span>m</span></label>
+                  <input type="number" id="in-l" step="1" value="50" min="0.1">
+              </div>
+              <div style="flex: 1;">
+                  <label for="in-e">Rugosidad (ε) <span>m</span></label>
+                  <input type="number" id="in-e" step="0.0000001" value="0.0000015" min="0">
+              </div>
+          </div>
       </div>
 
       <div class="control">
-          <label for="in-temp">Temperatura del Agua (°C) <span>opcional</span></label>
-          <input type="number" id="in-temp" step="1" placeholder="Ej: 20" min="0" max="100">
-      </div>
-
-      <div class="control">
-          <label for="in-nu">Viscosidad Cinemática (ν) <span>m²/s</span></label>
-          <input type="text" id="in-nu" value="1,0200e-6">
+          <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                  <label for="in-temp">Temp. H₂O (°C) <span>opc.</span></label>
+                  <input type="number" id="in-temp" step="1" placeholder="Ej: 20" min="0" max="100">
+              </div>
+              <div style="flex: 1;">
+                  <label for="in-nu">Viscosidad (ν) <span>m²/s</span></label>
+                  <input type="text" id="in-nu" value="1,0200e-6">
+              </div>
+          </div>
       </div>
 
     </aside>
