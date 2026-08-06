@@ -236,16 +236,13 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
       </div>
 
       <div class="control">
-          <div style="display: flex; gap: 10px;">
-              <div style="flex: 1;">
-                  <label for="in-temp">Temp. H₂O (°C) <span>opc.</span></label>
-                  <input type="number" id="in-temp" step="1" placeholder="Ej: 20" min="0" max="100">
-              </div>
-              <div style="flex: 1;">
-                  <label for="in-nu">Viscosidad (ν) <span>m²/s</span></label>
-                  <input type="text" id="in-nu" value="1,0200e-6">
-              </div>
-          </div>
+          <label for="in-temp">Temperatura del Agua (°C) <span>opcional</span></label>
+          <input type="number" id="in-temp" step="1" placeholder="Ej: 20" min="0" max="100">
+      </div>
+
+      <div class="control">
+          <label for="in-nu">Viscosidad Cinemática (ν) <span>m²/s</span></label>
+          <input type="text" id="in-nu" value="1,0200e-6">
       </div>
 
     </aside>
