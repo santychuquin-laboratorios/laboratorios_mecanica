@@ -87,44 +87,35 @@ document.addEventListener("DOMContentLoaded", () => {
         outHf.innerText = hf.toFixed(4).replace('.', ',');
     }
 
-    // --- JET COLORMAP (Mapeo de color CFD) ---
+    // --- JET COLORMAP (Mapeo de color CFD para temperaturas/velocidades) ---
     function getCfdColor(value, alpha = 1.0) {
         const val = Math.min(Math.max(value, 0), 1);
         let r = 0, g = 0, b = 0;
         if (val < 0.25) {
-            r = 0;
-            g = Math.round(val * 4 * 255);
-            b = 255;
+            // Azul a Celeste
+            r = 37;
+            g = Math.round(99 + val * 4 * 136); // de 99 a 235
+            b = 235;
         } else if (val < 0.5) {
-            r = 0;
-            g = 255;
-            b = Math.round((0.5 - val) * 4 * 255);
+            // Celeste a Verde
+            r = Math.round(37 - (val - 0.25) * 4 * 3); // de 37 a 34
+            g = Math.round(235 - (val - 0.25) * 4 * 38); // de 235 a 197
+            b = Math.round(235 - (val - 0.25) * 4 * 141); // de 235 a 94
         } else if (val < 0.75) {
-            r = Math.round((val - 0.5) * 4 * 255);
-            g = 255;
-            b = 0;
+            // Verde a Amarillo/Naranja
+            r = Math.round(34 + (val - 0.5) * 4 * 211); // de 34 a 245
+            g = Math.round(197 - (val - 0.5) * 4 * 39); // de 197 a 158
+            b = Math.round(94 - (val - 0.5) * 4 * 83); // de 94 a 11
         } else {
-            r = 255;
-            g = Math.round((1.0 - val) * 4 * 255);
-            b = 0;
+            // Naranja a Rojo
+            r = Math.round(245 + (val - 0.75) * 4 * 14); // de 245 a 255
+            g = Math.round(158 - (val - 0.75) * 4 * 158); // de 158 a 0
+            b = Math.round(11 - (val - 0.75) * 4 * 11); // de 11 a 0
         }
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
-    // --- SIMULACIÓN DE FLUJO CFD ---
-    const particles = [];
-    const numParticles = 140;
-
-    for (let i = 0; i < numParticles; i++) {
-        particles.push({
-            x: Math.random() * 800,
-            y: 82 + Math.random() * 91, // Entre y=80 y y=175
-            baseSpeed: 0.4 + Math.random() * 0.6,
-            offsetY: Math.random() * 100,
-            size: 1.5 + Math.random() * 1.5
-        });
-    }
-
+    // --- BUCLE DE SIMULACIÓN CFD ---
     function animateCfd() {
         const re = currentRe;
         const v = currentV;
@@ -132,248 +123,264 @@ document.addEventListener("DOMContentLoaded", () => {
         const isTransition = re > 2000 && re <= 4000;
         const isZero = re === 0 || v === 0;
 
-        // 1. Limpieza con arrastre (estilo cometa)
-        ctx.fillStyle = "rgba(15, 23, 42, 0.24)"; // 0.24 para estelas fluidas hermosas
+        // 1. Limpiar fondo del resolvedor (Color crema claro/gris del entorno)
+        ctx.fillStyle = "#faf8f2"; // Crema muy suave como el de la imagen de referencia
         ctx.fillRect(0, 0, 800, 220);
 
-        // 2. Actualizar y dibujar partículas CFD
-        particles.forEach(p => {
-            if (isZero) {
-                // Dibujar estático si no hay flujo
-                ctx.fillStyle = "rgba(100, 116, 139, 0.3)";
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
-                ctx.fill();
-                return;
-            }
+        // 2. Dibujar zona de entrada fría (Completamente Azul Real)
+        ctx.fillStyle = "rgb(37, 99, 235)";
+        ctx.fillRect(0, 80, 150, 95);
 
-            // Normalizado respecto al eje central del tubo (y=127.5, radio=47.5)
-            const yNorm = (p.y - 127.5) / 47.5;
-            let u_local = 0;
+        // 3. Renderizar gradiente CFD térmico desarrollado a lo largo del tubo
+        // Se dibuja en rebanadas verticales (slices) para crear un mapa continuo de alta performance
+        const xStart = 150;
+        const xEnd = 720;
+        const tNow = Date.now() * 0.003 * Math.max(v, 0.5);
 
-            // Perfil de velocidad CFD
-            if (isTurbulent) {
-                // Perfil turbulento (Ley de la potencia 1/7 - más plano en el centro)
-                u_local = v * 1.2 * Math.pow(1.0 - Math.min(Math.abs(yNorm), 0.999), 1/7);
-            } else {
-                // Perfil laminar (Parabólico de Poiseuille)
-                u_local = v * 2.0 * (1.0 - yNorm * yNorm);
-            }
+        // Determinar tasa de difusión según régimen (turbulento mezcla mucho más rápido que laminar)
+        let diffRate = 0.024;
+        if (isTurbulent) diffRate = 0.22; // Desarrollo térmico ultra corto por mezcla turbulenta
+        else if (isTransition) diffRate = 0.075;
 
-            // Velocidad de movimiento visual en el canvas
-            const speedScale = 12; // Factor de animación
-            const dx = u_local * speedScale * p.baseSpeed;
-            p.x += dx;
-
-            // Retorno al inicio al salir de la pantalla
-            if (p.x > 810) {
-                p.x = -10;
-                p.y = 82 + Math.random() * 91;
-            }
-
-            // Fluctuaciones dinámicas (remolinos en turbulento, ondas en transición)
-            if (isTurbulent) {
-                // Turbulencia caótica de alta frecuencia
-                const freq = 0.05;
-                const amp = 1.5 * Math.min(v, 1.5);
-                p.y += Math.sin(p.x * freq + p.offsetY + Date.now() * 0.005) * amp + (Math.random() - 0.5) * 1.5;
-            } else if (isTransition) {
-                // Ondulación suave en transición (Ondas TS)
-                const freq = 0.02;
-                const amp = 1.0;
-                p.y += Math.sin(p.x * freq + p.offsetY + Date.now() * 0.002) * amp;
-            }
-
-            // Mantener estrictamente dentro del tubo
-            if (p.y < 82) p.y = 82;
-            if (p.y > 173) p.y = 173;
-
-            // Obtener color CFD Jet según velocidad local
-            const maxRefSpeed = isTurbulent ? v * 1.2 : v * 2.0;
-            const normSpeed = maxRefSpeed > 0 ? u_local / maxRefSpeed : 0;
+        for (let x = xStart; x <= xEnd; x += 3) {
+            const dx = x - xStart;
             
-            let pColor = "#64748b";
-            if (isTurbulent) {
-                pColor = getCfdColor(normSpeed, 0.65);
-            } else if (isTransition) {
-                pColor = getCfdColor(normSpeed, 0.55);
-            } else {
-                pColor = getCfdColor(normSpeed, 0.45);
+            // Espesor de penetración de capa límite térmica delta (de 0 a 1)
+            let d_thermal = diffRate * Math.sqrt(dx);
+
+            // Modulaciones dinámicas de flujo (ondas de inestabilidad y remolinos turbulentos)
+            if (!isZero) {
+                if (isTurbulent) {
+                    // Turbulencia: Remolinos caóticos de alta frecuencia viajando a la derecha
+                    const freq1 = 0.06, freq2 = 0.14;
+                    const amp1 = 0.09, amp2 = 0.04;
+                    d_thermal += Math.sin(x * freq1 - tNow * 2.0) * amp1 + 
+                                 Math.sin(x * freq2 + tNow * 3.5) * amp2 + 
+                                 (Math.random() - 0.5) * 0.02;
+                } else if (isTransition) {
+                    // Transición: Ondulación sinusoidal clásica de capa límite (ondas Tollmien-Schlichting)
+                    const freq = 0.025;
+                    const amp = 0.08;
+                    d_thermal += Math.sin(x * freq - tNow * 1.2) * amp;
+                }
             }
 
-            ctx.fillStyle = pColor;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
-            ctx.fill();
-        });
+            const delta = Math.min(Math.max(d_thermal, 0), 1.0);
 
-        // 3. Rejilla de medición CFD (Faint Grid)
-        ctx.strokeStyle = "rgba(71, 85, 105, 0.15)";
-        ctx.lineWidth = 1;
-        for (let x = 40; x < 800; x += 40) {
-            ctx.beginPath();
-            ctx.moveTo(x, 80);
-            ctx.lineTo(x, 175);
-            ctx.stroke();
+            // Temperatura del centro (se calienta cuando las capas límite se unen en el centro, delta=1)
+            let T_center = 0.0;
+            if (d_thermal > 1.0) {
+                const mergeFactor = isTurbulent ? 1.8 : 1.2;
+                T_center = 1.0 - Math.exp(-mergeFactor * (d_thermal - 1.0));
+            }
+
+            // Crear gradiente lineal vertical para este slice
+            const grad = ctx.createLinearGradient(0, 80, 0, 175);
+            grad.addColorStop(0.0, "rgb(239, 68, 68)"); // Pared superior caliente (Red)
+            
+            const stopTop = Math.max(0.001, Math.min(delta * 0.5, 0.49));
+            grad.addColorStop(stopTop, "rgb(37, 99, 235)"); // Límite de la corriente fría superior (Blue)
+            
+            grad.addColorStop(0.5, getCfdColor(T_center)); // Temperatura en el eje central
+            
+            const stopBottom = Math.min(0.999, Math.max(1.0 - delta * 0.5, 0.51));
+            grad.addColorStop(stopBottom, "rgb(37, 99, 235)"); // Límite de la corriente fría inferior (Blue)
+            
+            grad.addColorStop(1.0, "rgb(239, 68, 68)"); // Pared inferior caliente (Red)
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(x, 80, 3.2, 95);
         }
-        for (let y = 80; y <= 175; y += 20) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(800, y);
-            ctx.stroke();
-        }
 
-        // 4. Paredes del tubo
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.45)";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(0, 80);
-        ctx.lineTo(800, 80);
-        ctx.stroke();
+        // 4. Dibujar zona de salida (Flujo térmicamente desarrollado / remanente)
+        // Se rellena con el gradiente final obtenido en xEnd
+        const finalGrad = ctx.createLinearGradient(0, 80, 0, 175);
+        let finalDelta = diffRate * Math.sqrt(xEnd - xStart);
+        let finalTCenter = 1.0 - Math.exp(-(isTurbulent ? 1.8 : 1.2) * (finalDelta - 1.0));
+        
+        finalGrad.addColorStop(0.0, "rgb(239, 68, 68)");
+        finalGrad.addColorStop(0.5, getCfdColor(finalTCenter));
+        finalGrad.addColorStop(1.0, "rgb(239, 68, 68)");
+        
+        ctx.fillStyle = finalGrad;
+        ctx.fillRect(xEnd, 80, 800 - xEnd, 95);
 
-        ctx.beginPath();
-        ctx.moveTo(0, 175);
-        ctx.lineTo(800, 175);
-        ctx.stroke();
+        // 5. Dibujar paredes sólidas del tubo (Barras grises horizontales)
+        ctx.fillStyle = "#57534e"; // Gris piedra oscuro
+        ctx.fillRect(0, 72, 800, 8);  // Pared superior
+        ctx.fillRect(0, 175, 800, 8); // Pared inferior
 
-        // 5. Graficar perfil de velocidad u(y) (Línea de sonda)
+        // 6. Graficar el Perfil de Velocidad Vectorial (Línea blanca de sonda con flechas)
         drawVelocityProfile();
 
-        // 6. Elementos HUD del Solver CFD
+        // 7. Renderizar elementos HUD y Leyenda del resolvedor CFD
         drawCfdHud();
 
         requestAnimationFrame(animateCfd);
     }
 
     function drawVelocityProfile() {
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
+        // Línea vertical base de referencia en x=30
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
         ctx.lineWidth = 1.2;
         ctx.setLineDash([3, 3]);
         ctx.beginPath();
-        ctx.moveTo(80, 80);
-        ctx.lineTo(80, 175);
+        ctx.moveTo(30, 80);
+        ctx.lineTo(30, 175);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        if (currentV === 0) return;
+        const re = currentRe;
+        const isTurbulent = re > 4000;
+        const isTransition = re > 2000 && re <= 4000;
+        const isZero = currentRe === 0 || currentV === 0;
 
-        const isTurbulent = currentRe > 4000;
-        const isTransition = currentRe >= 2000 && currentRe <= 4000;
+        if (isZero) return;
 
-        let profileColor = "#00f6ff"; // Laminar
-        if (isTurbulent) profileColor = "#ef4444"; // Turbulento
-        else if (isTransition) profileColor = "#f59e0b"; // Transición
-
-        ctx.strokeStyle = profileColor;
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = profileColor;
+        // Dibujar curva parabólica/plana en blanco reluciente
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2.2;
+        ctx.shadowColor = "rgba(255, 255, 255, 0.5)";
         ctx.shadowBlur = 4;
         ctx.beginPath();
+
+        const xBase = 30;
+        const maxArrowLength = 80;
 
         for (let y = 80; y <= 175; y++) {
             const yNorm = (y - 127.5) / 47.5;
             let u = 0;
 
             if (isTurbulent) {
+                // Perfil turbulento chato (Ley 1/7)
                 u = 1.0 * Math.pow(1.0 - Math.min(Math.abs(yNorm), 0.999), 1/7);
-                // Vibración de alta frecuencia (ruido turbulento)
-                const noise = Math.sin(y * 0.4 + Date.now() * 0.08) * 0.025 + (Math.random() - 0.5) * 0.03;
+                // Vibración de turbulencia
+                const noise = Math.sin(y * 0.4 + Date.now() * 0.08) * 0.02 + (Math.random() - 0.5) * 0.015;
                 u = Math.max(u + noise, 0);
             } else if (isTransition) {
                 u = 1.1 * (1.0 - yNorm * yNorm);
-                // Fluctuación ondulatoria suave
-                const wave = Math.sin(y * 0.15 + Date.now() * 0.015) * 0.04;
+                const wave = Math.sin(y * 0.15 + Date.now() * 0.015) * 0.03;
                 u = Math.max(u + wave, 0);
             } else {
+                // Laminar parabólico puro
                 u = 1.2 * (1.0 - yNorm * yNorm);
             }
 
-            const scale = 110; // Pixeles de escala
-            const dx = u * scale;
-
-            if (y === 80) ctx.moveTo(80 + dx, y);
-            else ctx.lineTo(80 + dx, y);
+            const dx = u * maxArrowLength;
+            if (y === 80) ctx.moveTo(xBase + dx, y);
+            else ctx.lineTo(xBase + dx, y);
         }
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Texto del perfil de velocidad
-        ctx.fillStyle = profileColor;
-        ctx.font = 'bold 9px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText("PERFIL DE VELOCIDAD u(y)", 80, 72);
+        // Dibujar vectores de velocidad (flechas horizontales internas)
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+        ctx.lineWidth = 1.2;
+        
+        const arrowYPositions = [96, 112, 127.5, 143, 159];
+        arrowYPositions.forEach(y => {
+            const yNorm = (y - 127.5) / 47.5;
+            let u = 0;
+            if (isTurbulent) {
+                u = 1.0 * Math.pow(1.0 - Math.min(Math.abs(yNorm), 0.999), 1/7);
+            } else if (isTransition) {
+                u = 1.1 * (1.0 - yNorm * yNorm);
+            } else {
+                u = 1.2 * (1.0 - yNorm * yNorm);
+            }
+
+            const dx = u * maxArrowLength;
+
+            if (dx > 8) {
+                // Línea del vector
+                ctx.beginPath();
+                ctx.moveTo(xBase, y);
+                ctx.lineTo(xBase + dx, y);
+                ctx.stroke();
+
+                // Cabeza de la flecha
+                ctx.beginPath();
+                ctx.moveTo(xBase + dx - 5, y - 3.5);
+                ctx.lineTo(xBase + dx, y);
+                ctx.lineTo(xBase + dx - 5, y + 3.5);
+                ctx.stroke();
+            }
+        });
     }
 
     function drawCfdHud() {
-        const isTurbulent = currentRe > 4000;
-        const isTransition = currentRe >= 2000 && currentRe <= 4000;
-        const isZero = currentRe === 0 || currentV === 0;
+        const re = currentRe;
+        const v = currentV;
+        const isTurbulent = re > 4000;
+        const isTransition = re > 2000 && re <= 4000;
+        const isZero = re === 0 || v === 0;
 
         let regimeText = "LAMINAR";
-        let regimeColor = "#00f6ff"; // Cyan
+        let regimeColor = "#2563eb"; // Azul para laminar
         let statusText = "ESTACIONARIO / PARABÓLICO";
         if (isZero) {
             regimeText = "SIN FLUJO";
-            regimeColor = "#64748b"; // Slate
+            regimeColor = "#64748b"; // Gris
             statusText = "INACTIVO";
         } else if (isTurbulent) {
             regimeText = "TURBULENTO";
-            regimeColor = "#ef4444"; // Red
+            regimeColor = "#dc2626"; // Rojo para turbulento
             statusText = "DESARROLLADO / CAÓTICO";
         } else if (isTransition) {
             regimeText = "TRANSICIÓN";
-            regimeColor = "#f59e0b"; // Amber
+            regimeColor = "#d97706"; // Naranja
             statusText = "ONDAS TRANSITORIAS";
         }
 
         // Título de la simulación CFD
-        ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-        ctx.font = '9px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText("SIMULACIÓN DE FLUIDOS NUMÉRICA (CFD)", 25, 25);
+        ctx.fillStyle = "#475569";
+        ctx.font = 'bold 9px "JetBrains Mono", "Courier New", monospace';
+        ctx.fillText("SIMULACIÓN DE FLUIDOS CFD - DESARROLLO TÉRMICO Y PERFIL", 15, 25);
 
-        // Parámetros numéricos a la derecha
+        // Parámetros numéricos en la parte superior derecha
         ctx.textAlign = "right";
         
         ctx.fillStyle = regimeColor;
         ctx.font = 'bold 11px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText(`RÉGIMEN: ${regimeText}`, 775, 25);
+        ctx.fillText(`RÉGIMEN: ${regimeText}`, 785, 25);
         
-        ctx.fillStyle = "rgba(148, 163, 184, 0.9)";
+        ctx.fillStyle = "#475569";
         ctx.font = '10px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText(`Re = ${Math.round(currentRe).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`, 775, 40);
-        ctx.fillText(`Velocidad Media V = ${currentV.toFixed(4).replace('.', ',')} m/s`, 775, 55);
+        ctx.fillText(`Re = ${Math.round(re).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`, 785, 40);
+        ctx.fillText(`Velocidad Media V = ${v.toFixed(4).replace('.', ',')} m/s`, 785, 55);
         
-        ctx.fillStyle = "rgba(148, 163, 184, 0.7)";
+        ctx.fillStyle = "#64748b";
         ctx.font = '9px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText(`ESTADO: ${statusText}`, 775, 70);
+        ctx.fillText(`ESTADO: ${statusText}`, 785, 70);
         
-        // Escala de Colores Jet de velocidad
-        const legendX = 620;
-        const legendY = 192;
-        const legendW = 150;
-        const legendH = 8;
+        // --- LEYENDA DEL GRADIENTE TÉRMICO (Lado Derecho) ---
+        const legendX = 745;
+        const legendY = 80;
+        const legendW = 12;
+        const legendH = 95;
         
-        ctx.textAlign = "left";
-        ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
-        ctx.font = '9px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText("Velocidad u", legendX - 70, legendY + 7);
-        
-        // Gradiente de leyenda
-        const grad = ctx.createLinearGradient(legendX, legendY, legendX + legendW, legendY);
-        grad.addColorStop(0.0, getCfdColor(0.0));
+        // Dibujar barra de color vertical
+        const grad = ctx.createLinearGradient(0, legendY, 0, legendY + legendH);
+        grad.addColorStop(0.0, "rgb(37, 99, 235)"); // Frío (Cold) - Azul en la parte superior
         grad.addColorStop(0.25, getCfdColor(0.25));
         grad.addColorStop(0.5, getCfdColor(0.5));
         grad.addColorStop(0.75, getCfdColor(0.75));
-        grad.addColorStop(1.0, getCfdColor(1.0));
+        grad.addColorStop(1.0, "rgb(239, 68, 68)"); // Caliente (Hot) - Rojo en la parte inferior
         
         ctx.fillStyle = grad;
         ctx.fillRect(legendX, legendY, legendW, legendH);
         
-        // Ticks
-        ctx.fillStyle = "rgba(148, 163, 184, 0.7)";
-        ctx.font = '8px "JetBrains Mono", "Courier New", monospace';
-        ctx.fillText("0", legendX, legendY + 18);
-        ctx.textAlign = "right";
-        ctx.fillText("Vmax", legendX + legendW, legendY + 18);
+        // Bordes de la barra de leyenda
+        ctx.strokeStyle = "rgba(71, 85, 105, 0.3)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(legendX, legendY, legendW, legendH);
+        
+        // Etiquetas de la leyenda
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#1e293b";
+        ctx.font = 'bold 9px "JetBrains Mono", "Courier New", monospace';
+        ctx.fillText("Cold (Entrada)", legendX + 18, legendY + 8);
+        ctx.fillText("Hot (Paredes)", legendX + 18, legendY + legendH - 2);
         
         // Reset alineación
         ctx.textAlign = "left";
