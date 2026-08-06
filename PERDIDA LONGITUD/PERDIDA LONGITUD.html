@@ -175,7 +175,13 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
     box-shadow: 0 0 12px 3px currentColor;
     z-index: 5;
 }
-
+#in-l {
+    transition: all 0.2s ease;
+}
+#in-l:focus {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px rgba(24, 168, 123, 0.15) !important;
+}
 </style>
 </head>
 <body>
@@ -235,11 +241,6 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
       </div>
 
       <div class="control">
-          <label for="in-l">Longitud de Tubería (L) <span>m</span></label>
-          <input type="number" id="in-l" step="1" value="50" min="0.1">
-      </div>
-
-      <div class="control">
           <label for="material-select">Material de Tubería</label>
           <select id="material-select">
               <option value="0.0000003">PLÁSTICO (3,0 x 10⁻⁷ m)</option>
@@ -267,6 +268,11 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
       <div class="control">
           <label for="in-nu">Viscosidad Cinemática (ν) <span>m²/s</span></label>
           <input type="text" id="in-nu" value="1,0200e-6">
+      </div>
+
+      <div class="control" style="border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px;">
+          <label for="in-l" style="color: var(--green); font-weight: 800;">Longitud de Tubería (L) <span style="color: var(--green);">m</span></label>
+          <input type="number" id="in-l" step="1" value="50" min="0.1" style="border-color: #a3e2bb;">
       </div>
 
     </aside>
