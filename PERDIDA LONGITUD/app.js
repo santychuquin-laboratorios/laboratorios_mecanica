@@ -4,12 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const inQm3s = document.getElementById("in-q-m3s");
     const inDmm = document.getElementById("in-d-mm");
     const inDm = document.getElementById("in-d-m");
+    const inL = document.getElementById("in-l");
     const inE = document.getElementById("in-e");
     const inTemp = document.getElementById("in-temp");
     const inNu = document.getElementById("in-nu");
     const materialSelect = document.getElementById("material-select");
 
-    // Datos de agua
+    // Datos de agua para viscosidad cinemática
     const waterProperties = [
         { t: 0, nu: 1.75e-6 },
         { t: 5, nu: 1.52e-6 },
@@ -51,17 +52,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Outputs
+    const outHf = document.getElementById("out-hf");
+    const outF = document.getElementById("out-f");
     const outV = document.getElementById("out-v");
     const outRe = document.getElementById("out-re");
     const outStatus = document.getElementById("out-status");
-    const outF = document.getElementById("out-f");
     const outEq = document.getElementById("out-eq");
-    const cardRe = document.querySelector(".card-re");
     const formulaF = document.getElementById("formula-f");
-    
-    let currentRe = 0; // Para la animación
-    let currentV = 0;  // Para la velocidad de la animación
-    const STORAGE_KEY = "virtualab_reynolds_data";
+    const cardRe = document.querySelector(".card-re");
+    const cardHf = document.querySelector(".card-hf");
+
+    // SVG Simulation Elements
+    const hglLine = document.getElementById("hgl-line");
+    const waterIn = document.getElementById("water-in");
+    const waterOut = document.getElementById("water-out");
+    const hfText = document.getElementById("hf-text");
+
+    let currentRe = 0; // Para la simulación
+    let currentV = 0;  // Para la simulación
+    let currentHf = 0; // Para la simulación
+    const STORAGE_KEY = "virtualab_loss_data";
 
     function saveData() {
         const data = {
@@ -69,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
             inQm3s: inQm3s.value,
             inDmm: inDmm.value,
             inDm: inDm.value,
+            inL: inL.value,
             inE: inE.value,
             inTemp: inTemp ? inTemp.value : "",
             inNu: inNu.value,
@@ -86,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(parsed.inQm3s !== undefined) inQm3s.value = parsed.inQm3s;
                 if(parsed.inDmm !== undefined) inDmm.value = parsed.inDmm;
                 if(parsed.inDm !== undefined) inDm.value = parsed.inDm;
+                if(parsed.inL !== undefined) inL.value = parsed.inL;
                 if(parsed.inE !== undefined) inE.value = parsed.inE;
                 if(parsed.inTemp !== undefined && inTemp) inTemp.value = parsed.inTemp;
                 if(parsed.inNu !== undefined) inNu.value = parsed.inNu.toString().replace('.', ',');
@@ -97,22 +109,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function calculate() {
-        saveData(); // Guardar el estado actual de los inputs de inmediato
+        saveData(); // Persistir entradas de inmediato
 
         const q_Ls = parseFloat(inQLs.value) || 0;
         const d_mm = parseFloat(inDmm.value) || 0;
+        const l_m = parseFloat(inL.value) || 0;
         const e_m_input = parseFloat(inE.value) || 0;
         const nu_m2s_input = parseFloat(inNu.value.replace(',', '.')) || 0;
 
-        if (d_mm <= 0 || nu_m2s_input <= 0 || q_Ls === 0) {
-            outV.innerText = "0.0000";
+        if (d_mm <= 0 || nu_m2s_input <= 0 || q_Ls === 0 || l_m <= 0) {
+            outHf.innerText = "0,0000";
+            outF.innerText = "0,0000";
+            outV.innerText = "0,0000";
             outRe.innerText = "0";
-            outF.innerText = "0.0000";
             outStatus.innerText = "Sin flujo";
             outStatus.className = "status-badge status-laminar";
             outEq.innerText = "-";
             currentRe = 0;
             currentV = 0;
+            currentHf = 0;
+
             if (cardRe) {
                 cardRe.style.background = "#f8fafc";
                 cardRe.style.borderColor = "#cbd5e1";
@@ -120,25 +136,26 @@ document.addEventListener("DOMContentLoaded", () => {
             if (formulaF) {
                 formulaF.innerHTML = `f = <span class="fraction"><span class="numerator">0,25</span><span class="denominator">[log<sub>10</sub>(<span class="fraction"><span class="numerator">ε</span><span class="denominator">3,7 · D</span></span> + <span class="fraction"><span class="numerator">5,74</span><span class="denominator">Re<sup>0,9</sup></span></span>)]<sup>2</sup></span></span>`;
             }
+            updateSimulation(0);
             return;
         }
 
-        // Conversions
+        // Conversiones
         const q_m3s = q_Ls / 1000;
         const d_m = d_mm / 1000;
         const e_m = e_m_input;
         const nu_m2s = nu_m2s_input;
 
-        // Area and Velocity
+        // Área y Velocidad
         const area = (Math.PI * Math.pow(d_m, 2)) / 4;
         const v = q_m3s / area;
-        currentV = v; // Guardar para la animación
-        
+        currentV = v;
+
         // Reynolds
         const re = (v * d_m) / nu_m2s;
-        currentRe = re; // Guardar para la animación
+        currentRe = re;
 
-        // Friction Factor
+        // Factor de Fricción
         let f = 0;
         let eqName = "";
 
@@ -150,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 formulaF.innerHTML = `f = <span class="fraction"><span class="numerator">64</span><span class="denominator">Re</span></span>`;
             }
         } else {
-            // Turbulent or Transition. Use Swamee-Jain.
+            // Turbulento/Transición (Swamee-Jain)
             const term1 = e_m / (3.7 * d_m);
             const term2 = 5.74 / Math.pow(re, 0.9);
             const logTerm = Math.log10(term1 + term2);
@@ -161,49 +178,75 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Display updates
+        // Pérdida de Carga Primaria (Darcy-Weisbach)
+        const g = 9.81;
+        const hf = f * (l_m / d_m) * (Math.pow(v, 2) / (2 * g));
+        currentHf = hf;
+
+        // Actualizar visualizaciones numéricas
+        outHf.innerText = hf.toFixed(4).replace('.', ',');
+        outF.innerText = f.toFixed(4).replace('.', ',');
         outV.innerText = v.toFixed(4).replace('.', ',');
-        
-        // Format Reynolds nicely
         outRe.innerText = Number.isInteger(re) ? re.toString() : re.toFixed(3).replace('.', ',');
-        
-        // Status Badge and Card Background
+
+        // Actualizar tarjeta Reynolds
         if (re < 2000) {
             outStatus.innerText = "Flujo Laminar";
             outStatus.className = "status-badge status-laminar";
             if (cardRe) {
-                cardRe.style.background = "#f0fdf4"; // Verde pastel
+                cardRe.style.background = "#f0fdf4"; 
                 cardRe.style.borderColor = "#a3e2bb";
             }
         } else if (re <= 4000) {
             outStatus.innerText = "Flujo en Transición";
             outStatus.className = "status-badge status-transition";
             if (cardRe) {
-                cardRe.style.background = "#fff7ed"; // Naranja pastel
+                cardRe.style.background = "#fff7ed"; 
                 cardRe.style.borderColor = "#ffd1a9";
             }
         } else {
             outStatus.innerText = "Flujo Turbulento";
             outStatus.className = "status-badge status-turbulent";
             if (cardRe) {
-                cardRe.style.background = "#fef2f2"; // Rojo pastel
+                cardRe.style.background = "#fef2f2"; 
                 cardRe.style.borderColor = "#fca5a5";
             }
         }
 
-        outF.innerText = f.toFixed(4).replace('.', ',');
         outEq.innerText = eqName;
+        updateSimulation(hf);
     }
 
-    // Add event listeners to all inputs
-    const inputs = [inE, inNu];
+    function updateSimulation(hf) {
+        // Altura inicial del agua y1 = 40 (representa la carga en la entrada, constante)
+        const y1 = 40;
+        // La caída máxima en el piezómetro de salida es de 60px (llega hasta y=100)
+        // Escalamos suponiendo que 5 metros de pérdida es el máximo visual.
+        const maxDrop = 60;
+        const drop = Math.min((hf / 5) * maxDrop, maxDrop);
+        const y2 = y1 + drop;
+
+        if (hglLine) {
+            hglLine.setAttribute("y2", y2);
+        }
+        if (waterOut) {
+            waterOut.setAttribute("y1", y2);
+            waterOut.setAttribute("y2", y2);
+        }
+        if (hfText) {
+            hfText.textContent = `hf: ${hf.toFixed(4).replace('.', ',')} m`;
+        }
+    }
+
+    // Event listeners
+    const inputs = [inL, inE, inNu];
     inputs.forEach(input => {
         input.addEventListener("input", () => {
             if (input === inE && materialSelect) {
                 materialSelect.value = "custom";
             }
             if (input === inNu && inTemp) {
-                inTemp.value = ""; // Limpiar temp si se escribe manualmente
+                inTemp.value = ""; 
             }
             calculate();
         });
@@ -255,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- SIMULACIÓN DE FLUJO ---
+    // --- SIMULACIÓN DE FLUJO DE PARTÍCULAS ---
     const pipe = document.getElementById("pipe-view");
     const particles = [];
     const numParticles = 100;
@@ -263,7 +306,10 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < numParticles; i++) {
         const p = document.createElement("div");
         p.className = "particle";
-        p.style.top = (Math.random() * 90 + 5) + "%";
+        // Las partículas fluyen dentro de la tubería, de y=110px a y=150px en la simulación.
+        // En porcentaje del contenedor de 180px de alto, la tubería va de ~61% a ~83%.
+        // Dejamos un margen del 2% arriba y abajo.
+        p.style.top = (63 + Math.random() * 16) + "%";
         if (pipe) pipe.appendChild(p);
         particles.push({
             el: p,
@@ -280,11 +326,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const isTurbulent = re > 4000;
         const isTransition = re > 2000 && re <= 4000;
         const isZero = re === 0 || v === 0;
- 
+
         particles.forEach(p => {
             if (isZero) return; // Sin flujo
             
-            // La velocidad física (v) controla el factor de rapidez visual (reducido para ser más lento)
+            // La velocidad controla la velocidad visual
             const speedFactor = Math.min(Math.max(v * 0.3, 0.01), 1.5);
             p.x += p.baseSpeed * speedFactor;
             if (p.x > 105) p.x = -5;
@@ -293,12 +339,12 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (isTurbulent) {
                 // Caótico
-                currentY += Math.sin(p.x * 0.8 + p.offsetY) * 4 + (Math.random() - 0.5) * 6;
+                currentY += Math.sin(p.x * 0.8 + p.offsetY) * 2 + (Math.random() - 0.5) * 3;
                 p.el.style.backgroundColor = "#ff003c";
                 p.el.style.color = "#ff003c";
             } else if (isTransition) {
                 // Ondulado
-                currentY += Math.sin(p.x * 0.2 + p.offsetY) * 3;
+                currentY += Math.sin(p.x * 0.2 + p.offsetY) * 1.5;
                 p.el.style.backgroundColor = "#ff9d00";
                 p.el.style.color = "#ff9d00";
             } else {
@@ -307,8 +353,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 p.el.style.color = "#00f6ff";
             }
 
-            if(currentY < 3) currentY = 3;
-            if(currentY > 93) currentY = 93;
+            // Mantener dentro del tubo (61% a 83% de 180px)
+            if(currentY < 62) currentY = 62;
+            if(currentY > 82) currentY = 82;
 
             p.el.style.left = p.x + "%";
             p.el.style.top = currentY + "%";
@@ -321,7 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
         animateParticles();
     }
 
-    // Initial load and calculation
+    // Carga inicial de datos persistidos y primer cálculo
     loadData();
     calculate();
 });
