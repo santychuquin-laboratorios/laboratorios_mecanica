@@ -220,6 +220,22 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
           <p class="copy">Ingresa los valores operativos para realizar los cálculos en tiempo real.</p>
       </section>
       
+      <!-- 1. Factor de Fricción -->
+      <div class="control">
+          <label for="in-f" style="color: var(--orange); font-weight: 800;">Factor de Fricción (f)</label>
+          <input type="number" id="in-f" step="0.0001" value="0.0200" min="0.0001" max="0.5" style="border-color: #ffd1a9;">
+      </div>
+
+      <!-- 2. Longitud de Tubería -->
+      <div class="control">
+          <label for="in-l" style="color: var(--green); font-weight: 800;">Longitud de Tubería (L) <span style="color: var(--green);">m</span></label>
+          <input type="number" id="in-l" step="1" value="50" min="0.1" style="border-color: #a3e2bb;">
+      </div>
+
+      <!-- Separador -->
+      <hr style="border: 0; border-top: 1px dashed var(--line); margin: 12px 0;">
+
+      <!-- 3. Caudal -->
       <div class="control">
           <label>Caudal (Q)</label>
           <div style="display: flex; gap: 10px; margin-top: 4px;">
@@ -234,6 +250,7 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
           </div>
       </div>
 
+      <!-- 4. Diámetro interno -->
       <div class="control">
           <label>Diámetro interno (D)</label>
           <div style="display: flex; gap: 10px; margin-top: 4px;">
@@ -246,16 +263,6 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                   <input type="number" id="in-d-m" step="0.001" value="0.100" min="0.0001">
               </div>
           </div>
-      </div>
-
-      <div class="control" style="border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px;">
-          <label for="in-f" style="color: var(--orange); font-weight: 800;">Factor de Fricción (f)</label>
-          <input type="number" id="in-f" step="0.0001" value="0.0200" min="0.0001" max="0.5" style="border-color: #ffd1a9;">
-      </div>
-
-      <div class="control" style="border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px;">
-          <label for="in-l" style="color: var(--green); font-weight: 800;">Longitud de Tubería (L) <span style="color: var(--green);">m</span></label>
-          <input type="number" id="in-l" step="1" value="50" min="0.1" style="border-color: #a3e2bb;">
       </div>
 
     </aside>
