@@ -171,8 +171,8 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    opacity: 1;
-    box-shadow: 0 0 12px 3px currentColor;
+    opacity: 0.5;
+    box-shadow: 0 0 10px 2px currentColor;
     z-index: 5;
 }
 #in-l {
@@ -342,8 +342,8 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                <div class="pipe-view" id="pipe-view">
                   <!-- SVG dinámico que representa la caída de carga hf y las líneas H1 y H2 -->
                   <svg id="simulation-svg" viewBox="0 0 800 180" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;">
-                      <!-- Tubo principal transparente -->
-                      <rect x="50" y="110" width="700" height="40" fill="rgba(255, 255, 255, 0.15)" stroke="rgba(203, 213, 225, 0.4)" stroke-width="3" rx="4"/>
+                      <!-- Tubo principal transparente de extremo a extremo -->
+                      <rect x="-10" y="110" width="820" height="40" fill="rgba(255, 255, 255, 0.12)" stroke="rgba(203, 213, 225, 0.5)" stroke-width="3"/>
                       
                       <!-- Piezómetros verticales -->
                       <!-- Entrada -->
