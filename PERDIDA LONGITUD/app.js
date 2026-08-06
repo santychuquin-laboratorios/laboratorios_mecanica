@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
             waterOut.setAttribute("y2", y2);
         }
         if (hfText) {
-            hfText.textContent = `hf: ${hf.toFixed(4).replace('.', ',')} m`;
+            hfText.textContent = `hLT: ${hf.toFixed(4).replace('.', ',')} m`;
         }
     }
 

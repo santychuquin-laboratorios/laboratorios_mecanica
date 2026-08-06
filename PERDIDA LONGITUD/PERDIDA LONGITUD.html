@@ -286,11 +286,11 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
         <div class="scene">
             <div class="cards-container">
                 
-                <!-- Tarjeta Pérdidas hf -->
+                <!-- Tarjeta Pérdidas hLT -->
                 <div class="result-card card-hf">
-                    <div class="result-title">Pérdida por Fricción (h<sub>f</sub>)</div>
-                    <div class="formula-box">
-                        h<sub>f</sub> = f · <span class="fraction"><span class="numerator">L</span><span class="denominator">D</span></span> · <span class="fraction"><span class="numerator">V<sup>2</sup></span><span class="denominator">2g</span></span>
+                    <div class="result-title">Pérdida por Fricción (h<sub>LT</sub>)</div>
+                    <div class="formula-box" style="font-size: 0.95rem;">
+                        h<sub>LT</sub> = <span class="fraction"><span class="numerator">8 · f · L · Q<sup>2</sup></span><span class="denominator">π<sup>2</sup> · g · D<sup>5</sup></span></span>
                     </div>
                     <div class="result-value">
                         <span id="out-hf">0,0000</span>
@@ -368,8 +368,8 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
                       <text x="680" y="14" font-size="11" text-anchor="middle" fill="#64748b" font-weight="900" font-family="Inter, sans-serif">H₂</text>
                       
                       <!-- Letrero de pérdida de carga en el centro -->
-                      <rect id="hf-bg" x="350" y="20" width="100" height="22" rx="6" fill="rgba(254, 226, 226, 0.9)" stroke="var(--red)" stroke-width="1"/>
-                      <text id="hf-text" x="400" y="35" font-size="11" text-anchor="middle" fill="var(--red)" font-weight="900" font-family="Inter, sans-serif">hf: 0,0000 m</text>
+                      <rect id="hf-bg" x="350" y="20" width="100" height="22" rx="6" fill="rgba(240, 253, 244, 0.95)" stroke="var(--green)" stroke-width="1"/>
+                      <text id="hf-text" x="400" y="35" font-size="11" text-anchor="middle" fill="var(--green)" font-weight="900" font-family="Inter, sans-serif">hLT: 0,0000 m</text>
                   </svg>
                   <!-- Las partículas de agua fluirán de izquierda a derecha en la franja y=110 a y=150 -->
                </div>
