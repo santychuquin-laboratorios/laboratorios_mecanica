@@ -70,9 +70,9 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Curvas de rendimiento y operación de bombas conectadas en serie.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_bombas_serie.jpg",
-        url: "#"
+        url: "7. BOMBAS SERIE/BOMBAS EN SERIE.html"
     },
     {
         id: "lab-008",
