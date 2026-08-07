@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function calcularNuevaCurva() {
         const { sysHg, sysK, pumpA, pumpB, pumpC } = getOriginalParams();
-        const qReq = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
+        const qReq = (parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0) / 1000;
 
         if (qReq <= 0) {
             resetOutputs();
@@ -342,3 +342,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarDatos();
 });
+

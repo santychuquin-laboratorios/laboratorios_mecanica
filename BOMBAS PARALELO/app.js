@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getHrAndQ() {
         const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
         const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
-        const q = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
+        const q = (parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0) / 1000;
         const hr = sysHg + (sysK * Math.pow(q, 2));
         return { hr, q, sysHg, sysK };
     }
@@ -381,5 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar datos al iniciar
     cargarDatos();
 });
+
 
 
