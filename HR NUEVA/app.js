@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     y: {
                         title: { display: true, text: 'Altura H (m)' },
                         beginAtZero: true,
-                        max: Math.ceil(max_h * 1.1)
+                        
                     }
                 }
             }
