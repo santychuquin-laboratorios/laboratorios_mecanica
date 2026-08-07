@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio virtual: Interpolación / Extrapolación Lineal</title>
+<style>
+:root{--ink:#14213d;--muted:#61708b;--paper:#f7f9fc;--card:#fff;--line:#dfe6ef;--navy:#0d2444;--blue:#246bfd;--purple:#7e22ce;--pink:#ec4899;--cyan:#06b6d4;--shadow:0 18px 50px rgba(20,33,61,.12);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0,#fdf4ff 0,transparent 32%),var(--paper)}
+button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;margin:auto;padding:10px 22px;height:100vh;display:flex;flex-direction:column;}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px}.brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,var(--purple),var(--pink));display:grid;place-items:center;color:#fff;box-shadow:0 10px 26px rgba(126,34,206,.28)}.logo svg{width:25px}.brand h1{font-size:1.12rem;margin:0}.brand p{font-size:.8rem;color:var(--muted);margin:3px 0 0}.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--muted);padding:8px 12px;border-radius:999px;font-size:.78rem; text-decoration: none;}.icon-btn{width:40px;height:40px;border:1px solid var(--line);background:#fff;border-radius:12px;color:var(--ink);display:grid;place-items:center}.icon-btn:hover{border-color:#b9c7da}.grid{display:grid;grid-template-columns:minmax(230px,300px) minmax(460px,1fr);gap:15px;flex:1;min-height:0;}.panel{background:rgba(255,255,255,.92);border:1px solid rgba(214,224,238,.9);border-radius:20px;box-shadow:0 7px 28px rgba(20,33,61,.06);min-height:0;overflow:hidden;}.sidebar{padding:12px 20px 8px 20px;display:flex;flex-direction:column;gap:5px}.eyebrow{color:var(--purple);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:.67rem}.sidebar h2{font-size:.95rem;margin:2px 0}.copy{font-size:.75rem;color:var(--muted);line-height:1.4;margin:0}
+.control {margin-bottom: 6px;}
+.control label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;font-weight:750;margin-bottom:3px}.control label span{color:var(--purple)}select,input[type=number],input[type=text]{width:100%;border:1px solid var(--line);border-radius:11px;padding:8px 10px;background:#fff;color:var(--ink);outline:none; font-size: 0.9rem;}select:focus,input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,72,153,.1)}
+.lab{overflow-y: auto;position:relative;display:flex;flex-direction:column}.lab-head{padding:12px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.lab-head h2{font-size:.96rem;margin:0}.scene{position:relative;flex:1;background:linear-gradient(#f9fcff,#eef5fb);padding: 20px; display: flex; flex-direction: column; justify-content: flex-start; gap: 20px;}.scene:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(126,34,206,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(126,34,206,.035) 1px,transparent 1px);background-size:24px 24px}
+@media(max-width:950px){.topbar{flex-wrap:wrap}.grid{grid-template-columns:1fr}}
+
+/* Estilos de resultados */
+.result-card {
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.result-card.card-main {
+    background: #fdf4ff;
+    border: 1px solid #fbcfe8;
+}
+.formula-box {
+    font-family: "Cambria Math", "Times New Roman", serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+    user-select: none;
+    line-height: 1;
+    font-weight: 500;
+}
+.fraction {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    align-items: center;
+    font-size: 0.85em;
+    line-height: 1;
+    margin: 0 3px;
+}
+.numerator {
+    border-bottom: 1.5px solid currentColor;
+    padding-bottom: 2px;
+    text-align: center;
+    width: 100%;
+}
+.denominator {
+    padding-top: 2px;
+    text-align: center;
+    width: 100%;
+}
+.result-title {
+    font-size: 0.85rem;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+.result-value {
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: var(--pink);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 6px;
+}
+.cards-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Gráfico de Interpolación SVG */
+.graph-container {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+    box-shadow: 0 10px 25px rgba(20,33,61,.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+svg.chart {
+    width: 100%;
+    height: auto;
+    max-height: 42vh;
+    overflow: visible;
+}
+.axis { stroke: var(--line); stroke-width: 2; }
+.grid-line { stroke: var(--line); stroke-width: 0.5; stroke-dasharray: 4,4; }
+.data-line { stroke: var(--muted); stroke-width: 2; fill: none; }
+.point { fill: var(--purple); stroke: #fff; stroke-width: 2; }
+.point-interp { fill: var(--pink); stroke: #fff; stroke-width: 2; }
+.label { fill: var(--muted); font-family: Inter; font-weight: 600; }
+.label-val { fill: var(--ink); font-weight: bold; }
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+        <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3v18h18M7 14l4-4 4 4 6-6"/>
+            </svg>
+        </div>
+        <div>
+            <h1><strong>INTERPOLACIÓN / EXTRAPOLACIÓN LINEAL</strong></h1>
+            <p>Herramienta rápida para estimación de datos tabulados</p>
+        </div>
+    </div>
+    <div class="top-actions" style="margin-left: auto; display: flex; gap: 8px;">
+        <a href="../calculos.html" class="pill" style="text-decoration:none; color:var(--ink); display:flex; align-items:center; gap:5px; font-weight:700;">⬅ Volver</a>
+    </div>
+  </header>
+  
+  <div class="grid">
+    <!-- Panel Izquierdo: Controles -->
+    <aside class="panel sidebar">
+      <section style="margin-bottom: 4px;">
+          <div class="eyebrow">Configuración</div>
+          <h2>Datos Conocidos</h2>
+          <p class="copy">Ingresa los puntos inferior y superior de la tabla.</p>
+      </section>
+      
+      <!-- Punto Inferior (1) -->
+      <div class="control" style="margin-top: 10px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <label style="color: var(--muted); font-weight: 800;">Punto Inferior (1)</label>
+          <div style="display: flex; gap: 10px; margin-top: 4px;">
+              <div style="flex: 1;">
+                  <label for="in-x1" style="font-size: 0.65rem; color: var(--muted); margin-bottom: 2px;">X₁</label>
+                  <input type="number" id="in-x1" step="any" value="10">
+              </div>
+              <div style="flex: 1;">
+                  <label for="in-y1" style="font-size: 0.65rem; color: var(--muted); margin-bottom: 2px;">Y₁</label>
+                  <input type="number" id="in-y1" step="any" value="100">
+              </div>
+          </div>
+      </div>
+
+      <!-- Valor X buscado -->
+      <div class="control" style="margin: 15px 0;">
+          <label for="in-x" style="color: var(--purple); font-weight: 800; font-size: 0.8rem;">Valor a Estimar (X)</label>
+          <input type="number" id="in-x" step="any" value="15" style="border-color: #d8b4fe; font-size: 1.1rem; padding: 10px; font-weight: bold; color: var(--purple);">
+      </div>
+
+      <!-- Punto Superior (2) -->
+      <div class="control" style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <label style="color: var(--muted); font-weight: 800;">Punto Superior (2)</label>
+          <div style="display: flex; gap: 10px; margin-top: 4px;">
+              <div style="flex: 1;">
+                  <label for="in-x2" style="font-size: 0.65rem; color: var(--muted); margin-bottom: 2px;">X₂</label>
+                  <input type="number" id="in-x2" step="any" value="20">
+              </div>
+              <div style="flex: 1;">
+                  <label for="in-y2" style="font-size: 0.65rem; color: var(--muted); margin-bottom: 2px;">Y₂</label>
+                  <input type="number" id="in-y2" step="any" value="200">
+              </div>
+          </div>
+      </div>
+
+    </aside>
+
+    <!-- Panel Central: Resultados -->
+    <div class="panel lab">
+        <div class="lab-head">
+            <h2>Resultados de Cálculo</h2>
+        </div>
+        
+        <div class="scene">
+            <div class="cards-container">
+                <div class="result-card card-main" style="width: 100%; max-width: 1000px;">
+                    <div class="result-title">Valor Calculado (Y)</div>
+                    <div class="formula-box" style="font-size: 0.95rem;">
+                        Y = Y₁ + <span class="fraction"><span class="numerator">(Y₂ - Y₁)</span><span class="denominator">(X₂ - X₁)</span></span> · (X - X₁)
+                    </div>
+                    <div class="result-value" id="out-y">
+                        150,0000
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico Interactivo SVG -->
+            <div class="graph-container">
+               <svg class="chart" viewBox="0 0 750 550" preserveAspectRatio="xMidYMid meet">
+                   <!-- Ejes -->
+                   <line class="axis" x1="140" y1="450" x2="720" y2="450" />
+                   <line class="axis" x1="140" y1="30" x2="140" y2="450" />
+                   
+                   <!-- Etiquetas de Ejes -->
+                   <text class="label" x="430" y="535" text-anchor="middle" font-size="34px" font-weight="900">Eje X</text>
+                   <text class="label" x="40" y="240" text-anchor="middle" transform="rotate(-90 40 240)" font-size="34px" font-weight="900">Eje Y</text>
+                   
+                   <!-- Línea de datos -->
+                   <line id="graph-line" class="data-line" stroke-width="6" x1="200" y1="400" x2="650" y2="100" />
+                   <line id="graph-line-dashed" class="grid-line" style="stroke:var(--purple);" stroke-width="3" x1="200" y1="400" x2="650" y2="100" stroke-dasharray="10,10" />
+                   
+                   <!-- Puntos de referencia -->
+                   <!-- Punto 1 -->
+                   <line id="g-x1-line" class="grid-line" x1="200" y1="450" x2="200" y2="400" />
+                   <line id="g-y1-line" class="grid-line" x1="140" y1="400" x2="200" y2="400" />
+                   <circle id="g-p1" class="point" cx="200" cy="400" r="14" />
+                   <text id="g-tx1" class="label-val" x="200" y="495" text-anchor="middle" font-size="28px" font-weight="bold">10</text>
+                   <text id="g-ty1" class="label-val" x="120" y="410" text-anchor="end" font-size="28px" font-weight="bold">100</text>
+
+                   <!-- Punto 2 -->
+                   <line id="g-x2-line" class="grid-line" x1="650" y1="450" x2="650" y2="100" />
+                   <line id="g-y2-line" class="grid-line" x1="140" y1="100" x2="650" y2="100" />
+                   <circle id="g-p2" class="point" cx="650" cy="100" r="14" />
+                   <text id="g-tx2" class="label-val" x="650" y="495" text-anchor="middle" font-size="28px" font-weight="bold">20</text>
+                   <text id="g-ty2" class="label-val" x="120" y="110" text-anchor="end" font-size="28px" font-weight="bold">200</text>
+
+                   <!-- Punto Interpolado -->
+                   <line id="g-x-line" class="grid-line" style="stroke:var(--pink);" stroke-width="3" x1="425" y1="450" x2="425" y2="250" />
+                   <line id="g-y-line" class="grid-line" style="stroke:var(--pink);" stroke-width="3" x1="140" y1="250" x2="425" y2="250" />
+                   <circle id="g-p" class="point-interp" cx="425" cy="250" r="18" />
+                   <text id="g-tx" class="label-val" style="fill:var(--pink);" x="425" y="495" text-anchor="middle" font-size="28px" font-weight="bold">15</text>
+                   <text id="g-ty" class="label-val" style="fill:var(--pink);" x="120" y="260" text-anchor="end" font-size="28px" font-weight="bold">150</text>
+               </svg>
+            </div>
+        </div>
+    </div>
+  </div>
+</main>
+<script src="app.js?v=3"></script>
+</body>
+</html>

@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentV = 0;  // Para la velocidad de la animación
     const STORAGE_KEY = "virtualab_reynolds_data";
 
-    function saveData() {
+    function saveData(calculatedF = "") {
         const data = {
             inQLs: inQLs.value,
             inQm3s: inQm3s.value,
@@ -72,7 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
             inE: inE.value,
             inTemp: inTemp ? inTemp.value : "",
             inNu: inNu.value,
-            materialSelect: materialSelect ? materialSelect.value : "custom"
+            materialSelect: materialSelect ? materialSelect.value : "custom",
+            calculatedF: calculatedF
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
@@ -193,6 +194,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         outF.innerText = f.toFixed(4).replace('.', ',');
         outEq.innerText = eqName;
+        saveData(f.toFixed(4).replace('.', ',')); // Guardar el f calculado final
+        
+        // Actualizar el enlace Siguiente dinámicamente con parámetros de la URL
+        const btnSiguiente = document.getElementById("btn-siguiente");
+        if (btnSiguiente) {
+            btnSiguiente.href = `../PERDIDA LONGITUD/PERDIDA LONGITUD.html?q=${q_Ls}&d=${d_mm}&f=${f.toFixed(4)}`;
+        }
     }
 
     // Add event listeners to all inputs
