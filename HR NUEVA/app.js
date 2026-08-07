@@ -157,6 +157,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         let max_h = 0;
+        let custom_y_max = pumpA;
+        if (pumpB > 0 && pumpC < 0) {
+            let q_peak = -pumpB / (2 * pumpC);
+            let h_peak = pumpA + pumpB * q_peak + pumpC * Math.pow(q_peak, 2);
+            if (h_peak > custom_y_max) custom_y_max = h_peak;
+        }
+        custom_y_max = Math.max(custom_y_max, sysHg) * 1.2;
+        if (custom_y_max <= 0) custom_y_max = 10;
         const hr_original_data = q_array.map(q => {
             const h = sysHg + sysK * Math.pow(q, 2);
             if (h > max_h) max_h = h;
@@ -202,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 label: 'Q Requerido',
-                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: max_h * 1.05 }],
+                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: custom_y_max }],
                 borderColor: 'red',
                 borderWidth: 2,
                 borderDash: [5, 5],
@@ -260,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     y: {
                         title: { display: true, text: 'Altura H (m)' },
                         beginAtZero: true,
-                        
+                        max: custom_y_max
                     }
                 }
             }
@@ -339,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarDatos();
 });
+
 
 
 
