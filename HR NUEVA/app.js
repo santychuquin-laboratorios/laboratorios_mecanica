@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 label: 'Q Requerido',
-                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: max_h * 2 }],
+                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: max_h * 1.05 }],
                 borderColor: 'red',
                 borderWidth: 2,
                 borderDash: [5, 5],
@@ -339,5 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarDatos();
 });
+
 
 
