@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = canvas.getContext('2d');
 
         const { sysHg, sysK, pumpA, pumpB, pumpC } = getOriginalParams();
+        const qReq = (parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0) / 1000;
         
         function findIntQ(a, b, c) {
             if (Math.abs(a) < 1e-9) return Math.abs(b) > 1e-9 ? -c / b : 0;
@@ -145,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isNaN(q_int_orig) && q_int_orig > 0) q_max = Math.max(q_max, q_int_orig * 1.15);
         if (!isNaN(q_zero_orig) && q_zero_orig > 0) q_max = Math.max(q_max, q_zero_orig * 1.05);
         if (!isNaN(q_int_nueva) && q_int_nueva > 0) q_max = Math.max(q_max, q_int_nueva * 1.15);
+        if (qReq > 0) q_max = Math.max(q_max, qReq * 1.15);
 
         if (q_max <= 0 || isNaN(q_max)) q_max = 0.015 * 1.5;
 
@@ -197,6 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 pointRadius: 0,
                 fill: false,
                 tension: 0.4
+            },
+            {
+                label: 'Q Requerido',
+                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: max_h * 2 }],
+                borderColor: 'red',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                fill: false
             }
         ];
 
@@ -223,20 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 fill: false,
                 tension: 0.4
             });
-            
-            const q_op = resolverQ(kGlobal);
-            if (q_op > 0) {
-                const hReq = pumpA + (pumpB * q_op) + (pumpC * Math.pow(q_op, 2));
-                datasets.push({
-                    label: 'Q Operación',
-                    data: [{ x: q_op * 1000, y: 0 }, { x: q_op * 1000, y: hReq }],
-                    borderColor: 'red',
-                    borderWidth: 1.5,
-                    borderDash: [3, 3],
-                    pointRadius: 0,
-                    fill: false
-                });
-            }
         }
 
         myChart = new Chart(ctx, {
@@ -342,4 +339,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarDatos();
 });
+
 
