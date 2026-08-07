@@ -100,15 +100,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function calculate() {
         saveData(); // Guardar el estado actual de los inputs de inmediato
 
-        const q_Ls = parseFloat(inQLs.value) || 0;
-        const d_mm = parseFloat(inDmm.value) || 0;
-        const e_m_input = parseFloat(inE.value) || 0;
+        const q_Ls = parseFloat(inQLs.value.toString().replace(',', '.')) || 0;
+        const d_mm = parseFloat(inDmm.value.toString().replace(',', '.')) || 0;
+        const e_m_input = parseFloat(inE.value.toString().replace(',', '.')) || 0;
         const nu_m2s_input = parseFloat(inNu.value.replace(',', '.')) || 0;
 
         if (d_mm <= 0 || nu_m2s_input <= 0 || q_Ls === 0) {
-            outV.innerText = "0.0000";
+            outV.innerText = "0,0000";
             outRe.innerText = "0";
-            outF.innerText = "0.0000";
+            outF.innerText = "0,0000";
             outStatus.innerText = "Sin flujo";
             outStatus.className = "status-badge status-laminar";
             outEq.innerText = "-";
@@ -219,12 +219,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (inQLs && inQm3s) {
         inQLs.addEventListener("input", () => {
-            const val = parseFloat(inQLs.value) || 0;
+            const val = parseFloat(inQLs.value.toString().replace(',', '.')) || 0;
             inQm3s.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
         inQm3s.addEventListener("input", () => {
-            const val = parseFloat(inQm3s.value) || 0;
+            const val = parseFloat(inQm3s.value.toString().replace(',', '.')) || 0;
             inQLs.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
@@ -232,12 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (inDmm && inDm) {
         inDmm.addEventListener("input", () => {
-            const val = parseFloat(inDmm.value) || 0;
+            const val = parseFloat(inDmm.value.toString().replace(',', '.')) || 0;
             inDm.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
         inDm.addEventListener("input", () => {
-            const val = parseFloat(inDm.value) || 0;
+            const val = parseFloat(inDm.value.toString().replace(',', '.')) || 0;
             inDmm.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (inTemp) {
         inTemp.addEventListener("input", () => {
             if (inTemp.value !== "") {
-                const t = parseFloat(inTemp.value);
+                const t = parseFloat(inTemp.value.toString().replace(',', '.'));
                 const nu = getViscosity(t);
                 inNu.value = nu.toExponential(4).replace('.', ',');
                 calculate();

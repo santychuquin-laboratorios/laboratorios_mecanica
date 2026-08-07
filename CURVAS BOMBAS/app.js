@@ -27,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getBombas() {
         return [
-            { name: "Bomba 1", a: parseFloat(document.getElementById("b1-a").value) || 0, b: parseFloat(document.getElementById("b1-b").value) || 0, c: parseFloat(document.getElementById("b1-c").value) || 0, color: "#e53e3e" },
-            { name: "Bomba 2", a: parseFloat(document.getElementById("b2-a").value) || 0, b: parseFloat(document.getElementById("b2-b").value) || 0, c: parseFloat(document.getElementById("b2-c").value) || 0, color: "#dd6b20" },
-            { name: "Bomba 3", a: parseFloat(document.getElementById("b3-a").value) || 0, b: parseFloat(document.getElementById("b3-b").value) || 0, c: parseFloat(document.getElementById("b3-c").value) || 0, color: "#38a169" },
-            { name: "Bomba 4", a: parseFloat(document.getElementById("b4-a").value) || 0, b: parseFloat(document.getElementById("b4-b").value) || 0, c: parseFloat(document.getElementById("b4-c").value) || 0, color: "#3182ce" },
-            { name: "Bomba 5", a: parseFloat(document.getElementById("b5-a").value) || 0, b: parseFloat(document.getElementById("b5-b").value) || 0, c: parseFloat(document.getElementById("b5-c").value) || 0, color: "#805ad5" }
+            { name: "Bomba 1", a: parseFloat(document.getElementById("b1-a").value.toString().replace(',', '.')) || 0, b: parseFloat(document.getElementById("b1-b").value.toString().replace(',', '.')) || 0, c: parseFloat(document.getElementById("b1-c").value.toString().replace(',', '.')) || 0, color: "#e53e3e" },
+            { name: "Bomba 2", a: parseFloat(document.getElementById("b2-a").value.toString().replace(',', '.')) || 0, b: parseFloat(document.getElementById("b2-b").value.toString().replace(',', '.')) || 0, c: parseFloat(document.getElementById("b2-c").value.toString().replace(',', '.')) || 0, color: "#dd6b20" },
+            { name: "Bomba 3", a: parseFloat(document.getElementById("b3-a").value.toString().replace(',', '.')) || 0, b: parseFloat(document.getElementById("b3-b").value.toString().replace(',', '.')) || 0, c: parseFloat(document.getElementById("b3-c").value.toString().replace(',', '.')) || 0, color: "#38a169" },
+            { name: "Bomba 4", a: parseFloat(document.getElementById("b4-a").value.toString().replace(',', '.')) || 0, b: parseFloat(document.getElementById("b4-b").value.toString().replace(',', '.')) || 0, c: parseFloat(document.getElementById("b4-c").value.toString().replace(',', '.')) || 0, color: "#3182ce" },
+            { name: "Bomba 5", a: parseFloat(document.getElementById("b5-a").value.toString().replace(',', '.')) || 0, b: parseFloat(document.getElementById("b5-b").value.toString().replace(',', '.')) || 0, c: parseFloat(document.getElementById("b5-c").value.toString().replace(',', '.')) || 0, color: "#805ad5" }
         ];
     }
 
@@ -123,13 +123,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function drawChart() {
         // Leer inputs
-        const Q_op = parseFloat(document.getElementById("flow-rate").value);
+        const Q_op = parseFloat(document.getElementById("flow-rate").value.toString().replace(',', '.'));
         // Obtener bombas
         const bombas = getBombas();
 
         // Leer datos de la curva resistente
-        const Hg = parseFloat(document.getElementById("sys-hg").value) || 0;
-        const K = parseFloat(document.getElementById("sys-k").value) || 0;
+        const Hg = parseFloat(document.getElementById("sys-hg").value.toString().replace(',', '.')) || 0;
+        const K = parseFloat(document.getElementById("sys-k").value.toString().replace(',', '.')) || 0;
 
         // 1. Eje Y: De la bomba que tenga más altura, aumenta un intervalo (asumimos intervalo de 10)
         let maxPumpH = 0;

@@ -18,18 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const baseHz = 60;
 
     function getHrAndQ() {
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
-        const q = parseFloat(inputs.sysQ.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+        const q = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
         const hr = sysHg + (sysK * Math.pow(q, 2));
         return { hr, q, sysHg, sysK };
     }
 
     function calcularVariador() {
         const { hr, q } = getHrAndQ();
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
 
         if (q <= 0) {
             outputs.alpha.textContent = '0,0000';
@@ -134,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Coeficientes de bomba unitaria
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
         // Datos Bomba Original (alpha = 1)
         const hb_original_data = [];
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (outputs.slider) {
         outputs.slider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
+            const val = parseFloat(e.target.value.toString().replace(',', '.'));
             alphaGlobal = val;
             outputs.alpha.textContent = val.toFixed(4).replace('.', ',');
             outputs.hz.textContent = (val * baseHz).toFixed(2).replace('.', ',');

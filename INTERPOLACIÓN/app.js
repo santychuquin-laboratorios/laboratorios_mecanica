@@ -117,11 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function calculate() {
-        const x1 = parseFloat(inX1.value) || 0;
-        const y1 = parseFloat(inY1.value) || 0;
-        const x2 = parseFloat(inX2.value) || 0;
-        const y2 = parseFloat(inY2.value) || 0;
-        const x = parseFloat(inX.value) || 0;
+        const x1 = parseFloat(inX1.value.toString().replace(',', '.')) || 0;
+        const y1 = parseFloat(inY1.value.toString().replace(',', '.')) || 0;
+        const x2 = parseFloat(inX2.value.toString().replace(',', '.')) || 0;
+        const y2 = parseFloat(inY2.value.toString().replace(',', '.')) || 0;
+        const x = parseFloat(inX.value.toString().replace(',', '.')) || 0;
 
         if (x1 !== x2) {
             // Y = Y1 + ((Y2 - Y1) / (X2 - X1)) * (X - X1)

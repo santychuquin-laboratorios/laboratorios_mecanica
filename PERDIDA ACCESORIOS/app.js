@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function calculate() {
-        const k = parseFloat(inK.value) || 0;
-        const q_m3s = parseFloat(inQm3s.value) || 0;
-        const d_m = parseFloat(inDm.value) || 0;
+        const k = parseFloat(inK.value.toString().replace(',', '.')) || 0;
+        const q_m3s = parseFloat(inQm3s.value.toString().replace(',', '.')) || 0;
+        const d_m = parseFloat(inDm.value.toString().replace(',', '.')) || 0;
         
         if (d_m > 0 && q_m3s > 0) {
             // hm = K * (8 * Q^2) / (pi^2 * g * D^4)
@@ -57,26 +57,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Caudal
     inQLs.addEventListener("input", () => {
-        const val = parseFloat(inQLs.value) || 0;
+        const val = parseFloat(inQLs.value.toString().replace(',', '.')) || 0;
         inQm3s.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
         calculate();
     });
     
     inQm3s.addEventListener("input", () => {
-        const val = parseFloat(inQm3s.value) || 0;
+        const val = parseFloat(inQm3s.value.toString().replace(',', '.')) || 0;
         inQLs.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
         calculate();
     });
     
     // Diámetro
     inDmm.addEventListener("input", () => {
-        const val = parseFloat(inDmm.value) || 0;
+        const val = parseFloat(inDmm.value.toString().replace(',', '.')) || 0;
         inDm.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
         calculate();
     });
     
     inDm.addEventListener("input", () => {
-        const val = parseFloat(inDm.value) || 0;
+        const val = parseFloat(inDm.value.toString().replace(',', '.')) || 0;
         inDmm.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
         calculate();
     });

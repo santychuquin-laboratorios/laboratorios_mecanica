@@ -24,18 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let hOperacionNuevo = 0;
 
     function getHrAndQ() {
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
-        const q = parseFloat(inputs.sysQ.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+        const q = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
         const hr = sysHg + (sysK * Math.pow(q, 2));
         return { hr, q, sysHg, sysK };
     }
 
     function calcularParalelo() {
         const { hr, q } = getHrAndQ();
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
 
         if (q <= 0) {
             alert('Por favor ingrese un valor válido para Q de funcionamiento.');
@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function calcularNuevoQ() {
         const { sysHg, sysK } = getHrAndQ();
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
-        const nManual = parseFloat(inputNManual.value) || 1;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
+        const nManual = parseFloat(inputNManual.value.toString().replace(',', '.')) || 1;
 
         if (nManual <= 0) {
             alert('El número de bombas debe ser mayor a 0');
@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Datos Curva Resistente
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
         
         let max_h = 0;
 
@@ -194,10 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Datos Curva Paralelo (Arreglo 1)
-        const n_manual = parseFloat(inputNManual.value) || 1;
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const n_manual = parseFloat(inputNManual.value.toString().replace(',', '.')) || 1;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
         const hb_paralelo_data = [];
         q_array.forEach(q => {

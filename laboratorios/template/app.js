@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnSimulate) {
         btnSimulate.addEventListener("click", () => {
             // Leer variables
-            const val1 = parseFloat(var1Input.value);
-            const val2 = parseFloat(var2Input.value);
+            const val1 = parseFloat(var1Input.value.toString().replace(',', '.'));
+            const val2 = parseFloat(var2Input.value.toString().replace(',', '.'));
             
             if (isNaN(val2)) {
                 alert("Por favor ingrese un número válido en la Variable 2.");

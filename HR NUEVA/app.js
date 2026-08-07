@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let kGlobal = -1;
 
     function getOriginalParams() {
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         return { sysHg, sysK, pumpA, pumpB, pumpC };
     }
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function calcularNuevaCurva() {
         const { sysHg, sysK, pumpA, pumpB, pumpC } = getOriginalParams();
-        const qReq = parseFloat(inputs.sysQ.value) || 0;
+        const qReq = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
 
         if (qReq <= 0) {
             resetOutputs();

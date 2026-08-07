@@ -20,19 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let alphaGlobal = 1;
 
     function getHrAndQ() {
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
-        const q = parseFloat(inputs.sysQ.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+        const q = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
         const hr = sysHg + (sysK * Math.pow(q, 2));
         return { hr, q, sysHg, sysK };
     }
 
     function calcularVariador() {
         const { hr, q } = getHrAndQ();
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
-        const dOriginal = parseFloat(inputs.diametro.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
+        const dOriginal = parseFloat(inputs.diametro.value.toString().replace(',', '.')) || 0;
 
         if (q <= 0) {
             outputs.alpha.textContent = '0,0000';
@@ -139,9 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return { x: q * 1000, y: h };
         });
 
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
         const hb_original_data = [];
         if (pumpA !== 0 || pumpB !== 0 || pumpC !== 0) {
@@ -305,9 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (outputs.slider) {
         outputs.slider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
+            const val = parseFloat(e.target.value.toString().replace(',', '.'));
             alphaGlobal = val;
-            const dOriginal = parseFloat(inputs.diametro.value) || 0;
+            const dOriginal = parseFloat(inputs.diametro.value.toString().replace(',', '.')) || 0;
             outputs.alpha.textContent = val.toFixed(4).replace('.', ',');
             outputs.hz.textContent = (val * dOriginal).toFixed(2).replace('.', ',');
             if (outputs.trimContainer && outputs.outPercent) {

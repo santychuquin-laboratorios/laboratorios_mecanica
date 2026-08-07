@@ -79,9 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function calculate() {
         saveData(); // Persistir entradas de inmediato
 
-        const q_Ls = parseFloat(inQLs.value) || 0;
-        const d_mm = parseFloat(inDmm.value) || 0;
-        const l_m = parseFloat(inL.value) || 0;
+        const q_Ls = parseFloat(inQLs.value.toString().replace(',', '.')) || 0;
+        const d_mm = parseFloat(inDmm.value.toString().replace(',', '.')) || 0;
+        const l_m = parseFloat(inL.value.toString().replace(',', '.')) || 0;
         const f_val = parseFloat(inF.value.toString().replace(',', '.')) || 0;
 
         if (d_mm <= 0 || f_val <= 0 || q_Ls === 0 || l_m <= 0) {
@@ -117,12 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (inQLs && inQm3s) {
         inQLs.addEventListener("input", () => {
-            const val = parseFloat(inQLs.value) || 0;
+            const val = parseFloat(inQLs.value.toString().replace(',', '.')) || 0;
             inQm3s.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
         inQm3s.addEventListener("input", () => {
-            const val = parseFloat(inQm3s.value) || 0;
+            const val = parseFloat(inQm3s.value.toString().replace(',', '.')) || 0;
             inQLs.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
@@ -130,12 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (inDmm && inDm) {
         inDmm.addEventListener("input", () => {
-            const val = parseFloat(inDmm.value) || 0;
+            const val = parseFloat(inDmm.value.toString().replace(',', '.')) || 0;
             inDm.value = val === 0 ? "" : (val / 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });
         inDm.addEventListener("input", () => {
-            const val = parseFloat(inDm.value) || 0;
+            const val = parseFloat(inDm.value.toString().replace(',', '.')) || 0;
             inDmm.value = val === 0 ? "" : (val * 1000).toPrecision(4).replace(/(?:\.0+|(\.\d+?)0+)$/, "$1");
             calculate();
         });

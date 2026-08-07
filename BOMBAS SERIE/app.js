@@ -22,17 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCalcVar = document.getElementById('btn-calc-var');
 
     function getHrAndQ() {
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
-        const q = parseFloat(inputs.sysQ.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+        const q = parseFloat(inputs.sysQ.value.toString().replace(',', '.')) || 0;
         const hr = sysHg + (sysK * Math.pow(q, 2));
         return { hr, q };
     }
 
     function getHbUnitaria(q) {
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         return pumpA + (pumpB * q) + (pumpC * Math.pow(q, 2));
     }
 
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function actualizarHbManual() {
         const { q } = getHrAndQ();
         const hb = getHbUnitaria(q);
-        const n_manual = parseFloat(inputNManual.value) || 0;
+        const n_manual = parseFloat(inputNManual.value.toString().replace(',', '.')) || 0;
         
         if (n_manual > 0 && hb > 0) {
             // outputs.hbN.textContent = (hb * n_manual).toFixed(2).replace('.', ',');
@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Auto-llenar Arreglo 2: A, B, C = (A, B, C de Arreglo 1) * n_manual
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
         if (n_manual > 0) {
             inputs.varA.value = pumpA * n_manual;
@@ -102,9 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function calcularVariador() {
         const { hr, q } = getHrAndQ();
         
-        const A = parseFloat(inputs.varA.value) || 0;
-        const B = parseFloat(inputs.varB.value) || 0;
-        const C = parseFloat(inputs.varC.value) || 0;
+        const A = parseFloat(inputs.varA.value.toString().replace(',', '.')) || 0;
+        const B = parseFloat(inputs.varB.value.toString().replace(',', '.')) || 0;
+        const C = parseFloat(inputs.varC.value.toString().replace(',', '.')) || 0;
 
         if (q <= 0) {
             alert('Por favor ingrese un valor válido para Q de funcionamiento.');
@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Datos Curva Resistente
-        const sysHg = parseFloat(inputs.sysHg.value) || 0;
-        const sysK = parseFloat(inputs.sysK.value) || 0;
+        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
+        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
         
         let max_h = 0;
 
@@ -182,10 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Datos Curva Serie (Arreglo 1)
-        const n_manual = parseFloat(inputNManual.value) || 1;
-        const pumpA = parseFloat(inputs.pumpA.value) || 0;
-        const pumpB = parseFloat(inputs.pumpB.value) || 0;
-        const pumpC = parseFloat(inputs.pumpC.value) || 0;
+        const n_manual = parseFloat(inputNManual.value.toString().replace(',', '.')) || 1;
+        const pumpA = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
         const hb_serie_data = [];
         q_array.forEach(q => {
@@ -197,9 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Datos Curva Variador (Arreglo 2)
-        const varA = parseFloat(inputs.varA.value) || 0;
-        const varB = parseFloat(inputs.varB.value) || 0;
-        const varC = parseFloat(inputs.varC.value) || 0;
+        const varA = parseFloat(inputs.varA.value.toString().replace(',', '.')) || 0;
+        const varB = parseFloat(inputs.varB.value.toString().replace(',', '.')) || 0;
+        const varC = parseFloat(inputs.varC.value.toString().replace(',', '.')) || 0;
         
         let alpha = 1;
         const alphaText = outputs.alpha.textContent.replace(',', '.');
