@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 label: 'Q Funcionamiento',
-                data: [{ x: q_op_original * 1000, y: 0 }, { x: q_op_original * 1000, y: max_h * 2 }],
+                data: [{ x: q_op_original * 1000, y: 0 }, { x: q_op_original * 1000, y: max_h * 1.05 }],
                 borderColor: 'red',
                 borderWidth: 2,
                 borderDash: [5, 5],
@@ -381,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar datos al iniciar
     cargarDatos();
 });
+
 
 
 
