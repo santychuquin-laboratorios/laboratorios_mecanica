@@ -204,8 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Datos Curva Resistente
-        const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
-        const sysK = parseFloat(inputs.sysK.value.toString().replace(',', '.')) || 0;
+// const sysHg = ... redeclared
+// const sysK = ... redeclared
         
         let max_h = 0;
 
@@ -381,3 +381,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar datos al iniciar
     cargarDatos();
 });
+
+
