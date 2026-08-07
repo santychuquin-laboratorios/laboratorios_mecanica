@@ -124,9 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { sysHg, sysK, pumpA, pumpB, pumpC } = getOriginalParams();
         
-        const q_original = resolverQ(sysK) > 0 ? resolverQ(sysK) : 0.015;
-        // 3 intervalos (l/s) superiores al caudal de funcionamiento original
-        const q_max = (Math.ceil(q_original * 1000) + 3) / 1000;
+        function findIntQ(a, b, c) {
+            if (Math.abs(a) < 1e-9) return Math.abs(b) > 1e-9 ? -c / b : 0;
+            const disc = b * b - 4 * a * c;
+            if (disc < 0) return 0;
+            return Math.max((-b + Math.sqrt(disc)) / (2 * a), (-b - Math.sqrt(disc)) / (2 * a), 0);
+        }
+
+        const q_int_orig = findIntQ(pumpC - sysK, pumpB, pumpA - sysHg);
+        const q_zero_orig = findIntQ(pumpC, pumpB, pumpA);
+        
+        let q_int_nueva = 0;
+        if (kGlobal > 0) {
+            q_int_nueva = findIntQ(pumpC - kGlobal, pumpB, pumpA - sysHg);
+        }
+
+        let q_base = resolverQ(sysK) > 0 ? resolverQ(sysK) : 0.015;
+        let q_max = (Math.ceil(q_base * 1000) + 3) / 1000; // Legacy approach
+
+        if (!isNaN(q_int_orig) && q_int_orig > 0) q_max = Math.max(q_max, q_int_orig * 1.15);
+        if (!isNaN(q_zero_orig) && q_zero_orig > 0) q_max = Math.max(q_max, q_zero_orig * 1.05);
+        if (!isNaN(q_int_nueva) && q_int_nueva > 0) q_max = Math.max(q_max, q_int_nueva * 1.15);
+
+        if (q_max <= 0 || isNaN(q_max)) q_max = 0.015 * 1.5;
+
         const num_points = 100;
         const q_array = [];
         for (let i = 0; i <= num_points; i++) {
@@ -259,6 +280,19 @@ document.addEventListener('DOMContentLoaded', () => {
             pumpC: inputs.pumpC.value
         };
         localStorage.setItem('hrnuevaInputs', JSON.stringify(datos));
+
+        const pumpSaved = localStorage.getItem('pumpLabState');
+        let pState = {};
+        if (pumpSaved) {
+            try { pState = JSON.parse(pumpSaved); } catch(e){}
+        }
+        pState['sys-hg'] = inputs.sysHg.value;
+        pState['sys-k'] = inputs.sysK.value;
+        pState['flow-rate'] = inputs.sysQ.value;
+        pState['b1-a'] = inputs.pumpA.value;
+        pState['b1-b'] = inputs.pumpB.value;
+        pState['b1-c'] = inputs.pumpC.value;
+        localStorage.setItem('pumpLabState', JSON.stringify(pState));
     }
 
     function cargarDatos() {
@@ -276,6 +310,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error al cargar datos", e);
             }
         }
+
+        const pumpSaved = localStorage.getItem('pumpLabState');
+        if (pumpSaved) {
+            try {
+                const pState = JSON.parse(pumpSaved);
+                if (pState['sys-hg'] !== undefined) inputs.sysHg.value = pState['sys-hg'];
+                if (pState['sys-k'] !== undefined) inputs.sysK.value = pState['sys-k'];
+                if (pState['flow-rate'] !== undefined) inputs.sysQ.value = pState['flow-rate'];
+                if (pState['b1-a'] !== undefined) inputs.pumpA.value = pState['b1-a'];
+                if (pState['b1-b'] !== undefined) inputs.pumpB.value = pState['b1-b'];
+                if (pState['b1-c'] !== undefined) inputs.pumpC.value = pState['b1-c'];
+            } catch (e) {}
+        }
+
         actualizarGrafica();
     }
 

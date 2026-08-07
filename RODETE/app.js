@@ -125,7 +125,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { q: q_op, sysHg, sysK } = getHrAndQ();
         
-        const q_max = (q_op > 0 ? q_op : 0.015) * 1.5;
+        const pumpA_temp = parseFloat(inputs.pumpA.value.toString().replace(',', '.')) || 0;
+        const pumpB_temp = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
+        const pumpC_temp = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
+        
+        function findIntQ(a, b, c) {
+            if (Math.abs(a) < 1e-9) return Math.abs(b) > 1e-9 ? -c / b : 0;
+            const disc = b * b - 4 * a * c;
+            if (disc < 0) return 0;
+            return Math.max((-b + Math.sqrt(disc)) / (2 * a), (-b - Math.sqrt(disc)) / (2 * a), 0);
+        }
+
+        const q_int_orig = findIntQ(pumpC_temp - sysK, pumpB_temp, pumpA_temp - sysHg);
+        const q_zero_orig = findIntQ(pumpC_temp, pumpB_temp, pumpA_temp);
+        
+        let q_int_recorte = 0, q_zero_recorte = 0;
+        if (alphaGlobal !== 1 && alphaGlobal > 0) {
+            q_int_recorte = findIntQ(pumpC_temp / Math.pow(alphaGlobal, 2) - sysK, pumpB_temp, pumpA_temp * Math.pow(alphaGlobal, 2) - sysHg);
+            q_zero_recorte = findIntQ(pumpC_temp / Math.pow(alphaGlobal, 2), pumpB_temp, pumpA_temp * Math.pow(alphaGlobal, 2));
+        }
+
+        let q_base = (q_op > 0 ? q_op : 0.015);
+        let q_max = q_base * 1.5;
+
+        if (!isNaN(q_int_orig) && q_int_orig > 0) q_max = Math.max(q_max, q_int_orig * 1.15);
+        if (!isNaN(q_zero_orig) && q_zero_orig > 0) q_max = Math.max(q_max, q_zero_orig * 1.05);
+        if (!isNaN(q_int_recorte) && q_int_recorte > 0) q_max = Math.max(q_max, q_int_recorte * 1.15);
+        if (!isNaN(q_zero_recorte) && q_zero_recorte > 0) q_max = Math.max(q_max, q_zero_recorte * 1.05);
+        
+        if (q_max <= 0 || isNaN(q_max)) q_max = 0.015 * 1.5;
+
         const num_points = 100;
         const q_array = [];
         for (let i = 0; i <= num_points; i++) {
@@ -259,6 +288,19 @@ document.addEventListener('DOMContentLoaded', () => {
             diametro: inputs.diametro.value
         };
         localStorage.setItem('rodeteInputs', JSON.stringify(datos));
+
+        const pumpSaved = localStorage.getItem('pumpLabState');
+        let pState = {};
+        if (pumpSaved) {
+            try { pState = JSON.parse(pumpSaved); } catch(e){}
+        }
+        pState['sys-hg'] = inputs.sysHg.value;
+        pState['sys-k'] = inputs.sysK.value;
+        pState['flow-rate'] = inputs.sysQ.value;
+        pState['b1-a'] = inputs.pumpA.value;
+        pState['b1-b'] = inputs.pumpB.value;
+        pState['b1-c'] = inputs.pumpC.value;
+        localStorage.setItem('pumpLabState', JSON.stringify(pState));
     }
 
     function cargarDatos() {
@@ -276,6 +318,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.error("Error al cargar datos", e);
             }
+        }
+
+        const pumpSaved = localStorage.getItem('pumpLabState');
+        if (pumpSaved) {
+            try {
+                const pState = JSON.parse(pumpSaved);
+                if (pState['sys-hg'] !== undefined) inputs.sysHg.value = pState['sys-hg'];
+                if (pState['sys-k'] !== undefined) inputs.sysK.value = pState['sys-k'];
+                if (pState['flow-rate'] !== undefined) inputs.sysQ.value = pState['flow-rate'];
+                if (pState['b1-a'] !== undefined) inputs.pumpA.value = pState['b1-a'];
+                if (pState['b1-b'] !== undefined) inputs.pumpB.value = pState['b1-b'];
+                if (pState['b1-c'] !== undefined) inputs.pumpC.value = pState['b1-c'];
+            } catch (e) {}
         }
         actualizarGrafica();
     }
