@@ -145,11 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (qOperacionNuevo > 0) {
             hOperacionNuevo = sysHg + (sysK * Math.pow(qOperacionNuevo, 2));
-            outputs.nuevoQ.textContent = (qOperacionNuevo * 1000).toFixed(4).replace('.', ','); // en l/s
-            outputs.nuevoH.textContent = hOperacionNuevo.toFixed(2).replace('.', ',');
+            if (outputs.nuevoQ) outputs.nuevoQ.textContent = (qOperacionNuevo * 1000).toFixed(4).replace('.', ','); // en l/s
+            if (outputs.nuevoH) outputs.nuevoH.textContent = hOperacionNuevo.toFixed(2).replace('.', ',');
         } else {
-            outputs.nuevoQ.textContent = 'Error';
-            outputs.nuevoH.textContent = 'Error';
+            if (outputs.nuevoQ) outputs.nuevoQ.textContent = 'Error';
+            if (outputs.nuevoH) outputs.nuevoH.textContent = 'Error';
         }
 
         actualizarGrafica();
