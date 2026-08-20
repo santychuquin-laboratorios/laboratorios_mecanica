@@ -86,7 +86,7 @@ const laboratorios = [
     },
     {
         id: "lab-009",
-        nombre: "Variador, Curva Motriz",
+        nombre: "Variador de Frecuencia",
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Efectos del uso de variadores de frecuencia en la curva motriz.",
         dificultad: "Avanzado",
