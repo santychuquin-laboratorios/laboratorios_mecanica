@@ -90,9 +90,9 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Efectos del uso de variadores de frecuencia en la curva motriz.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_variador.jpg",
-        url: "#"
+        url: "9. VARIADOR DE FRECUENCIA/VARIADOR DE FRECUENCIA.html"
     },
     {
         id: "lab-010",
