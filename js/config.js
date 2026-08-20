@@ -80,9 +80,9 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Curvas de rendimiento y operación de bombas conectadas en paralelo.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_bombas_paralelo.jpg",
-        url: "#"
+        url: "8. BOMBAS EN PARALELO/BOMBAS EN PARALELO.html"
     },
     {
         id: "lab-009",
