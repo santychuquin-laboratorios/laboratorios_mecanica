@@ -100,9 +100,9 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Pruebas de eficiencia y potencia en turbinas de acción Pelton.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_turbina_pelton.jpg",
-        url: "#"
+        url: "10. TURBINA PELTON/TURBINA PELTON.html"
     },
     {
         id: "lab-011",
