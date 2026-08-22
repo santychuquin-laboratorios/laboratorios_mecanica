@@ -173,11 +173,13 @@
 /* Ajuste final del banco proporcional para tablets. */
 @media (pointer: coarse) {
     html, body { height: auto !important; overflow: auto !important; }
-    .app { height: auto !important; min-height: 100vh; }
+    .app { height: auto !important; min-height:100vh; padding:10px !important; }
     .scene, .lab { min-height: 700px !important; }
-    .grid { grid-template-columns:245px minmax(0,1fr) !important; }
-    .right { grid-column:1/-1 !important; display:grid !important; grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important; overflow:visible !important; }
-    .right > section:first-child { grid-column:1/-1; }
+    .grid { grid-template-columns:minmax(205px,235px) minmax(440px,1fr) minmax(275px,315px) !important; gap:10px !important; }
+    .sidebar { padding:12px !important; gap:10px !important; }
+    .lab, .right { min-width:0 !important; }
+    .right { grid-column:auto !important; display:flex !important; padding:10px !important; gap:8px !important; overflow:hidden !important; }
+    .topbar { flex-wrap:wrap; }
 }
 @media (max-width:900px) {
     .app { padding:10px; }
