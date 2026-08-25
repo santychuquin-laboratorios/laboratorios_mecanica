@@ -110,9 +110,9 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Pruebas de eficiencia y potencia en turbinas de reacción Francis.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_turbina_francis.jpg",
-        url: "#"
+        url: "11. TURBINA FRANCIS/TURBINA FRANCIS.html"
     },
     {
         id: "lab-012",
