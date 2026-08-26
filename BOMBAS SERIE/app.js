@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputNManual = document.getElementById('input-n-manual');
     const btnCalcVar = document.getElementById('btn-calc-var');
+    const graphXMax = document.getElementById('graph-x-max');
+    const graphYMax = document.getElementById('graph-y-max');
 
     function getHrAndQ() {
         const sysHg = parseFloat(inputs.sysHg.value.toString().replace(',', '.')) || 0;
@@ -198,6 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isNaN(q_zero2) && q_zero2 > 0) q_max = Math.max(q_max, q_zero2 * 1.05);
         
         if (q_max <= 0 || isNaN(q_max)) q_max = 0.015 * 1.5;
+        const xMaxManual = parseFloat(graphXMax.value.toString().replace(',', '.'));
+        const xManualActivo = graphXMax.dataset.manual === 'true' && xMaxManual > 0;
+        if (xManualActivo) {
+            q_max = xMaxManual / 1000;
+        } else {
+            graphXMax.value = Math.max(1, Math.ceil(q_max * 1000));
+        }
 
         const num_points = 50;
         const q_array = [];
@@ -223,14 +232,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const pumpB = parseFloat(inputs.pumpB.value.toString().replace(',', '.')) || 0;
         const pumpC = parseFloat(inputs.pumpC.value.toString().replace(',', '.')) || 0;
         
-        const hb_serie_data = [];
-        q_array.forEach(q => {
-            const h = n_manual * (pumpA + (pumpB * q) + (pumpC * Math.pow(q, 2)));
-            if (h >= 0) {
-                hb_serie_data.push({ x: q * 1000, y: h });
-                if (h > max_h) max_h = h;
-            }
-        });
+        const totalRodetes = Math.max(1, Math.floor(n_manual));
+        const coloresSerie = ['#18a87b', '#0f9f8f', '#8b5cf6', '#f59e0b', '#ef4444'];
+        const hb_series_datasets = [];
+        for (let rodete = 1; rodete <= totalRodetes; rodete++) {
+            const data = [];
+            q_array.forEach(q => {
+                const h = rodete * (pumpA + (pumpB * q) + (pumpC * Math.pow(q, 2)));
+                if (h >= 0) {
+                    data.push({ x: q * 1000, y: h });
+                    if (h > max_h) max_h = h;
+                }
+            });
+            hb_series_datasets.push({
+                label: `Bomba en Serie (n=${rodete})`,
+                data,
+                borderColor: coloresSerie[(rodete - 1) % coloresSerie.length],
+                borderWidth: rodete === totalRodetes ? 3 : 2,
+                borderDash: rodete === totalRodetes ? [] : [5, 5],
+                pointRadius: 0,
+                fill: false,
+                tension: 0.4
+            });
+        }
 
         // Datos Curva Variador (Arreglo 2)
         const varA = parseFloat(inputs.varA.value.toString().replace(',', '.')) || 0;
@@ -252,6 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        const yMaxManual = parseFloat(graphYMax.value.toString().replace(',', '.'));
+        const yManualActivo = graphYMax.dataset.manual === 'true' && yMaxManual > 0;
+        const autoMaxH = Math.max(10, Math.ceil(max_h / 10) * 10);
+        const chartMaxH = yManualActivo ? yMaxManual : autoMaxH;
+        if (!yManualActivo) graphYMax.value = chartMaxH;
+
         if (myChart) {
             myChart.destroy();
         }
@@ -270,16 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         fill: false,
                         tension: 0.4
                     },
-                    {
-                        label: `Bomba en Serie (n=${n_manual})`,
-                        data: hb_serie_data,
-                        borderColor: '#18a87b', // Green
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        pointRadius: 0,
-                        fill: false,
-                        tension: 0.4
-                    },
+                    ...hb_series_datasets,
                     {
                         label: `Bomba con Variador (α=${alpha.toFixed(3).replace('.', ',')})`,
                         data: hb_var_data,
@@ -291,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     {
                         label: 'Q Funcionamiento',
-                        data: [{ x: q_op * 1000, y: 0 }, { x: q_op * 1000, y: max_h }],
+                        data: [{ x: q_op * 1000, y: 0 }, { x: q_op * 1000, y: chartMaxH }],
                         borderColor: 'red',
                         borderWidth: 2,
                         borderDash: [5, 5],
@@ -319,7 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     y: {
                         title: { display: true, text: 'Altura H (m)' },
-                        beginAtZero: true
+                        beginAtZero: true,
+                        max: chartMaxH
                     }
                 }
             }
@@ -343,7 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
             pumpA: inputs.pumpA.value,
             pumpB: inputs.pumpB.value,
             pumpC: inputs.pumpC.value,
-            nManual: inputNManual.value
+            nManual: inputNManual.value,
+            graphXMax: graphXMax.value,
+            graphYMax: graphYMax.value,
+            graphXManual: graphXMax.dataset.manual,
+            graphYManual: graphYMax.dataset.manual
         };
         localStorage.setItem('bombasSerieInputs', JSON.stringify(datos));
 
@@ -372,6 +398,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (datos.pumpA !== undefined) inputs.pumpA.value = datos.pumpA;
                 if (datos.pumpB !== undefined) inputs.pumpB.value = datos.pumpB;
                 if (datos.pumpC !== undefined) inputs.pumpC.value = datos.pumpC;
+                if (datos.graphXManual === 'true' && datos.graphXMax !== undefined) {
+                    graphXMax.value = datos.graphXMax;
+                    graphXMax.dataset.manual = 'true';
+                }
+                if (datos.graphYManual === 'true' && datos.graphYMax !== undefined) {
+                    graphYMax.value = datos.graphYMax;
+                    graphYMax.dataset.manual = 'true';
+                }
             } catch (e) {
                 console.error("Error al cargar datos", e);
             }
@@ -398,6 +432,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ['sysHg', 'sysK', 'sysQ', 'pumpA', 'pumpB', 'pumpC'].forEach(key => {
         inputs[key].addEventListener('input', guardarDatos);
     });
+    [graphXMax, graphYMax].forEach(input => input.addEventListener('input', () => {
+        input.dataset.manual = input.value.trim() ? 'true' : 'false';
+        guardarDatos();
+        actualizarGrafica();
+    }));
 
     btnCalc.addEventListener('click', calcularSerie);
     btnCalcVar.addEventListener('click', calcularVariador);

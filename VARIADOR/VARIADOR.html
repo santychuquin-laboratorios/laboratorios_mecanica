@@ -18,6 +18,7 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
 .control label{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;font-weight:750;margin-bottom:4px}.control label span{color:var(--orange)}select,input[type=number],input[type=text]{width:100%;border:1px solid var(--line);border-radius:11px;padding:6px 10px;background:#fff;color:var(--ink);outline:none; font-size: 0.9rem;}select:focus,input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(244,123,32,.1)}
 .lab{overflow-y: auto;position:relative;display:flex;flex-direction:column}.lab-head{padding:10px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.lab-head h2{font-size:.96rem;margin:0}.scene{position:relative;flex:1;background:linear-gradient(#f9fcff,#eef5fb);overflow:hidden;padding: 20px; display: flex; flex-direction: column; justify-content: flex-start; gap: 20px; align-items: center;}.scene:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(244,123,32,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(244,123,32,.035) 1px,transparent 1px);background-size:24px 24px}
 @media(max-width:950px){.topbar{flex-wrap:wrap}.grid{grid-template-columns:1fr}}
+.axis-controls{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-left:auto}.axis-field{width:132px}.axis-field label{display:block;margin-bottom:3px;color:var(--muted);font-size:.62rem;font-weight:800;text-align:center}.axis-field input{height:32px;padding:5px 8px;text-align:center;font-size:.78rem}.axis-hint{max-width:92px;color:var(--muted);font-size:.62rem;line-height:1.2}@media(max-width:950px){.axis-controls{order:3;width:100%;margin-left:0}.top-actions{margin-left:auto!important}}
 
 /* Estilos de resultados central */
 .result-card-large {
@@ -73,6 +74,11 @@ button,select,input{font:inherit}button{cursor:pointer}.app{max-width:1480px;mar
             <h1><strong>VARIADOR DE FRECUENCIA</strong></h1>
             <p>Cálculo de ajuste de velocidad (α)</p>
         </div>
+    </div>
+    <div class="axis-controls" aria-label="Límites de la gráfica">
+      <div class="axis-field"><label for="graph-x-max">X MÁX. · CAUDAL (l/s)</label><input type="number" id="graph-x-max" min="1" step="1" data-manual="false" title="Borra el valor para volver al ajuste automático"></div>
+      <div class="axis-field"><label for="graph-y-max">Y MÁX. · ALTURA (m)</label><input type="number" id="graph-y-max" min="1" step="5" data-manual="false" title="Borra el valor para volver al ajuste automático"></div>
+      <span class="axis-hint">Automático; edita solo si lo deseas</span>
     </div>
     <div class="top-actions" style="margin-left: auto; display: flex; gap: 8px;">
         <a href="../calculos.html" class="pill" style="text-decoration:none; color:var(--ink); display:flex; align-items:center; gap:5px; font-weight:700;">⬅ Inicio</a>

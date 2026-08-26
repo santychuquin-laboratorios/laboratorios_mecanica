@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const graphXMax = document.getElementById('graph-x-max');
+    const graphYMax = document.getElementById('graph-y-max');
+
+    function getChartLimits(autoX, autoY) {
+        const roundedX = Math.max(1, Math.ceil(autoX));
+        const roundedY = Math.max(10, Math.ceil(autoY / 10) * 10);
+        const manualX = parseFloat(graphXMax.value.replace(',', '.'));
+        const manualY = parseFloat(graphYMax.value.replace(',', '.'));
+        const chartMaxX = graphXMax.dataset.manual === 'true' && manualX > 0 ? manualX : roundedX;
+        const chartMaxY = graphYMax.dataset.manual === 'true' && manualY > 0 ? manualY : roundedY;
+        if (graphXMax.dataset.manual !== 'true') graphXMax.value = chartMaxX;
+        if (graphYMax.dataset.manual !== 'true') graphYMax.value = chartMaxY;
+        return { chartMaxX, chartMaxY };
+    }
+
+    function setupAxisControls(redraw) {
+        const saved = JSON.parse(localStorage.getItem('hrNuevaGraphAxes') || '{}');
+        [[graphXMax, saved.x, saved.xManual], [graphYMax, saved.y, saved.yManual]].forEach(([input, value, manual]) => {
+            if (manual === true && parseFloat(value) > 0) { input.value = value; input.dataset.manual = 'true'; }
+            input.addEventListener('input', () => {
+                input.dataset.manual = input.value.trim() ? 'true' : 'false';
+                localStorage.setItem('hrNuevaGraphAxes', JSON.stringify({ x: graphXMax.value, y: graphYMax.value, xManual: graphXMax.dataset.manual === 'true', yManual: graphYMax.dataset.manual === 'true' }));
+                redraw();
+            });
+        });
+    }
     const inputs = {
         sysHg: document.getElementById('sys-hg'),
         sysK: document.getElementById('sys-k'),
@@ -193,6 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        const { chartMaxX, chartMaxY } = getChartLimits(q_max * 1000, custom_y_max);
+
         if (myChart) {
             myChart.destroy();
         }
@@ -210,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 label: 'Q Requerido',
-                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: custom_y_max }],
+                data: [{ x: qReq * 1000, y: 0 }, { x: qReq * 1000, y: chartMaxY }],
                 borderColor: 'red',
                 borderWidth: 2,
                 borderDash: [5, 5],
@@ -258,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         type: 'linear',
                         title: { display: true, text: 'Caudal Q (l/s)' },
                         min: 0,
-                        max: q_max * 1000,
+                        max: chartMaxX,
                         ticks: {
                             callback: function(val) {
                                 return val.toFixed(1).replace('.', ',');
@@ -268,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     y: {
                         title: { display: true, text: 'Altura H (m)' },
                         beginAtZero: true,
-                        max: custom_y_max
+                        max: chartMaxY
                     }
                 }
             }
@@ -345,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCalc.addEventListener('click', calcularNuevaCurva);
     }
 
+    setupAxisControls(actualizarGrafica);
     cargarDatos();
 });
 
