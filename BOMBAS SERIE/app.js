@@ -89,13 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Escuchar cambios para recalcular el auto-llenado
-    ['pumpA', 'pumpB', 'pumpC'].forEach(key => {
-        inputs[key].addEventListener('input', () => {
-            actualizarHbManual();
-        });
-    });
-
     inputNManual.addEventListener('input', () => {
         actualizarHbManual();
         guardarDatos();
@@ -428,9 +421,16 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarHbManual();
     }
 
-    // Escuchar cambios para guardar automáticamente
-    ['sysHg', 'sysK', 'sysQ', 'pumpA', 'pumpB', 'pumpC'].forEach(key => {
-        inputs[key].addEventListener('input', guardarDatos);
+    // Guardar y redibujar inmediatamente al modificar cualquier dato.
+    ['sysHg', 'sysK', 'sysQ', 'pumpA', 'pumpB', 'pumpC', 'varA', 'varB', 'varC'].forEach(key => {
+        inputs[key].addEventListener('input', () => {
+            if (['pumpA', 'pumpB', 'pumpC'].includes(key)) {
+                actualizarHbManual();
+            } else {
+                actualizarGrafica();
+            }
+            guardarDatos();
+        });
     });
     [graphXMax, graphYMax].forEach(input => input.addEventListener('input', () => {
         input.dataset.manual = input.value.trim() ? 'true' : 'false';
