@@ -80,6 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const c = pumpC * Math.pow(q, 2);
 
         function setOutputs(val) {
+            if (val > 1) {
+                alert('El factor de recorte (λ) no puede ser mayor que 1. Revise los datos ingresados: un recorte solo puede conservar o reducir el diámetro original.');
+                alphaGlobal = 1;
+                outputs.alpha.textContent = 'No válido';
+                outputs.hz.textContent = 'No válido';
+                if (outputs.slider) {
+                    outputs.slider.value = 1;
+                    outputs.slider.disabled = true;
+                }
+                if (outputs.trimContainer) {
+                    outputs.trimContainer.style.display = 'none';
+                }
+                return;
+            }
             if (val > 0) {
                 alphaGlobal = val;
                 outputs.alpha.textContent = val.toFixed(4).replace('.', ',');
