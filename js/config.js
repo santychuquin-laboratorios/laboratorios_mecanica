@@ -120,8 +120,8 @@ const laboratorios = [
         categoria: "Mecánica de Fluidos Aplicada",
         descripcion: "Pruebas de eficiencia en turbinas de hélice tipo Kaplan.",
         dificultad: "Avanzado",
-        estado: "proximamente",
+        estado: "disponible",
         imagen: "assets/images/lab_turbina_kaplan.jpg",
-        url: "#"
+        url: "12. TURBINA KAPLAN/TURBINA KAPLAN.html"
     }
 ];
