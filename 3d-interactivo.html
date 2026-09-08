@@ -11,9 +11,15 @@
         .interactivo-container { max-width: 1200px; margin: 40px auto 60px; padding: 3rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -1px rgba(0,0,0,.03); min-height: 60vh; }
         .interactivo-container h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: .5rem; }
         .interactivo-container .section-header p { color: var(--text-muted); font-size: 1.1rem; }
-        .modelos-pendientes { text-align: center; padding: 3rem 1.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); background: var(--bg-main); }
-        .modelos-pendientes svg { width: 64px; height: 64px; color: var(--primary); margin-bottom: 1rem; }
-        .modelos-pendientes p { color: var(--text-muted); margin: .5rem 0 1.5rem; }
+        .modelos-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .modelos-grid .card-img-container { height: auto; aspect-ratio: 3 / 2; background: #081725; }
+        .modelos-grid .card-img { display: block; }
+        .modelos-grid .card-content { padding: 1.5rem; }
+        .modelos-grid .lab-title { line-height: 1.4; margin: .5rem 0 .75rem; }
+        .modelos-grid .lab-desc { font-size: 1rem; margin-bottom: 1.75rem; }
+        .model-status { display: block; text-align: center; padding: .85rem; border-radius: var(--radius-md); background: #eff6ff; color: #2563eb; font-size: .9rem; font-weight: 600; }
+        @media (max-width: 1000px) { .modelos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 600px) { .modelos-grid { grid-template-columns: minmax(0, 1fr); } }
         .footer-simple { text-align: center; padding: 2rem; color: #94a3b8; font-size: .9rem; }
         @media (max-width: 768px) { .interactivo-container { margin: 24px 4%; padding: 1.5rem; } .interactivo-container h1 { font-size: 2rem; } }
     </style>
@@ -42,12 +48,74 @@
             <h1>Módulo 3D Interactivo</h1>
             <p>Modelos tridimensionales para el aprendizaje de la Mecánica de los Fluidos.</p>
         </div>
-        <section class="modelos-pendientes" aria-labelledby="modelos-titulo">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M32 5 56 18v28L32 59 8 46V18Z M8 18l24 14 24-14 M32 32v27 M20 12l24 14"/></svg>
-            <h2 id="modelos-titulo">Próximamente: modelos 3D</h2>
-            <p>Los modelos interactivos estarán disponibles en esta sección.</p>
-            <a href="index.html#laboratorios" class="btn-primary">Explorar laboratorios</a>
-        </section>
+        <div class="grid-container modelos-grid">
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-compuerta.png" alt="Ilustración de Válvula de Compuerta" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Válvulas</span></div>
+                    <h2 class="lab-title">1. Válvula de Compuerta</h2>
+                    <p class="lab-desc">Apertura y cierre del paso de fluido mediante una compuerta deslizante.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-mariposa.png" alt="Ilustración de Válvula de Mariposa" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Válvulas</span></div>
+                    <h2 class="lab-title">2. Válvula de Mariposa</h2>
+                    <p class="lab-desc">Control del paso de fluido mediante el giro de un disco central.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-bola.png" alt="Ilustración de Válvula de Bola" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Válvulas</span></div>
+                    <h2 class="lab-title">3. Válvula de Bola</h2>
+                    <p class="lab-desc">Cierre de un cuarto de vuelta mediante una esfera perforada.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-retencion.png" alt="Ilustración de Válvula de Retención" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Válvulas</span></div>
+                    <h2 class="lab-title">4. Válvula de Retención</h2>
+                    <p class="lab-desc">Paso del fluido en un solo sentido para evitar el flujo inverso.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-aire.png" alt="Ilustración de Válvula de Aire" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Válvulas</span></div>
+                    <h2 class="lab-title">5. Válvula de Aire</h2>
+                    <p class="lab-desc">Liberación del aire acumulado en los sistemas de tuberías.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+            <article class="lab-card">
+                <div class="card-img-container">
+                    <img src="assets/images/3d-bomba.png" alt="Ilustración de Bomba Centrífuga" class="card-img" width="1536" height="1024" loading="lazy">
+                </div>
+                <div class="card-content">
+                    <div class="card-header"><span class="category-tag">Turbomáquinas</span></div>
+                    <h2 class="lab-title">6. Bomba Centrífuga</h2>
+                    <p class="lab-desc">Impulsión del fluido mediante la rotación de un rodete.</p>
+                    <span class="model-status">3D próximamente</span>
+                </div>
+            </article>
+        </div>
     </main>
     <footer class="footer-simple">&copy; 2026 VirtuaLab. Proyecto académico.</footer>
     <script src="js/navigation.js"></script>
