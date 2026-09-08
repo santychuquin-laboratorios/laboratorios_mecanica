@@ -108,6 +108,21 @@ ul {
     gap: 2rem;
 }
 
+.nav-menu a { white-space: nowrap; }
+
+@media (min-width: 769px) and (max-width: 1250px) {
+    .header .container { height: auto; min-height: 70px; flex-wrap: wrap; gap: .75rem; padding: .75rem 0; }
+    .nav-menu ul { gap: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+    .header .logo { font-size: clamp(.75rem, 2.8vw, 1.2rem); gap: .25rem; }
+    .header .header-logo-img { height: 28px; margin-right: 0; }
+    .header .logo-icon { font-size: 1.2rem; }
+    .header .menu-toggle { flex-shrink: 0; margin-left: .5rem; }
+    .header .nav-menu:not(.show) { visibility: hidden; }
+}
+
 .nav-menu a {
     font-weight: 500;
     color: var(--text-muted);

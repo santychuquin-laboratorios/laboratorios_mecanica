@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculos | VirtuaLab</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { background: #f8fafc; }
@@ -36,11 +36,13 @@
                 <img src="assets/images/mecanica.png" alt="Logo Carrera Mecánica" class="header-logo-img">
                 <span class="logo-icon">🧮</span> VirtuaLab Cálculos
             </a>
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Abrir menú" aria-controls="nav-menu" aria-expanded="false"><span></span><span></span><span></span></button>
             <nav class="nav-menu" id="nav-menu">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="index.html#laboratorios">Laboratorios</a></li>
                     <li><a href="calculos.html" class="active">Cálculos</a></li>
+                    <li><a href="3d-interactivo.html">3D Interactivo</a></li>
                 </ul>
             </nav>
         </div>
@@ -192,6 +194,7 @@
     <footer style="text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.9rem;">
         &copy; 2026 VirtuaLab. Proyecto académico.
     </footer>
+    <script src="js/navigation.js"></script>
 </body>
 </html>
 

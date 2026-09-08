@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Interactivo | VirtuaLab</title>
+    <meta name="description" content="Espacio para modelos 3D interactivos de VirtuaLab Carrera de Mecánica.">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .interactivo-container { max-width: 1200px; margin: 40px auto 60px; padding: 3rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -1px rgba(0,0,0,.03); min-height: 60vh; }
+        .interactivo-container h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: .5rem; }
+        .interactivo-container .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .modelos-pendientes { text-align: center; padding: 3rem 1.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); background: var(--bg-main); }
+        .modelos-pendientes svg { width: 64px; height: 64px; color: var(--primary); margin-bottom: 1rem; }
+        .modelos-pendientes p { color: var(--text-muted); margin: .5rem 0 1.5rem; }
+        .footer-simple { text-align: center; padding: 2rem; color: #94a3b8; font-size: .9rem; }
+        @media (max-width: 768px) { .interactivo-container { margin: 24px 4%; padding: 1.5rem; } .interactivo-container h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/espoch.png" alt="Logo ESPOCH" class="header-logo-img">
+                <img src="assets/images/mecanica.png" alt="Logo Carrera Mecánica" class="header-logo-img">
+                <span class="logo-icon">🔬</span> VirtuaLab 3D Interactivo
+            </a>
+            <button class="menu-toggle" id="mobile-menu-btn" aria-label="Abrir menú" aria-controls="nav-menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <nav class="nav-menu" id="nav-menu" aria-label="Navegación principal">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#laboratorios">Laboratorios</a></li>
+                    <li><a href="calculos.html">Cálculos</a></li>
+                    <li><a href="3d-interactivo.html" class="active" aria-current="page">3D Interactivo</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="interactivo-container">
+        <div class="section-header">
+            <h1>Módulo 3D Interactivo</h1>
+            <p>Modelos tridimensionales para el aprendizaje de la Mecánica de los Fluidos.</p>
+        </div>
+        <section class="modelos-pendientes" aria-labelledby="modelos-titulo">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M32 5 56 18v28L32 59 8 46V18Z M8 18l24 14 24-14 M32 32v27 M20 12l24 14"/></svg>
+            <h2 id="modelos-titulo">Próximamente: modelos 3D</h2>
+            <p>Los modelos interactivos estarán disponibles en esta sección.</p>
+            <a href="index.html#laboratorios" class="btn-primary">Explorar laboratorios</a>
+        </section>
+    </main>
+    <footer class="footer-simple">&copy; 2026 VirtuaLab. Proyecto académico.</footer>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
