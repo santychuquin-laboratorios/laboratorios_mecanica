@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d46"><title>Bomba centrífuga | 3D GENIAL</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/"}}</script>
+</head>
+<body>
+<header><a class="brand" href="./"><span class="brand-icon">3D</span> GENIAL<span class="divider"></span><small>LABORATORIO VIRTUAL</small></a><span class="course">MECÁNICA DE FLUIDOS <b>01</b></span></header>
+<main>
+  <section class="intro"><div><p class="eyebrow">EXPLORA · COMPRENDE · EXPERIMENTA</p><h1>BOMBA CENTRÍFUGA <span>3D INTERACTIVA</span></h1><p>Explora los principales componentes y observa el funcionamiento interno de una bomba centrífuga.</p></div><span class="badge"><i></i> Modelo interactivo</span></section>
+  <div class="workspace">
+    <section class="viewer-card" aria-label="Visor interactivo de la bomba">
+      <div class="toolbar"><div class="modes"><button id="external" aria-pressed="true">◉ Vista externa</button><button id="internal" aria-pressed="false">◈ Vista interna</button><button id="explode" aria-pressed="false">⌘ Despiece</button></div><button id="assemble">↺ Armar bomba</button></div>
+      <div id="viewport"><div class="scene-heading"><span class="eyebrow">BOMBA DE ASPIRACIÓN AXIAL</span><strong id="view-title">Conjunto ensamblado</strong></div><div class="scene-meta">MODELO DIDÁCTICO<br><span>Referencia KWP · sin escala</span></div><div id="labels"></div><div id="loading" role="status">Preparando el modelo 3D…</div><div class="orientation">Y ↑ <span>Z ↙</span> X →</div><div class="canvas-actions"><button id="labels-toggle" aria-pressed="false">⌖ Mostrar etiquetas</button><button id="reset">↺ Reiniciar cámara</button></div></div>
+      <div class="viewer-footer"><span><b>↔</b> Arrastra para girar <span class="desktop-hint">· Rueda para acercar · Clic para explorar</span></span><span class="touch-hint">Un dedo: giro · Dos dedos: zoom</span><span id="status" role="status">10 componentes independientes</span></div>
+      <div class="simulation"><div class="sim-block"><p class="eyebrow">ACCIONAMIENTO</p><button id="spin" class="primary" aria-pressed="false">▶ Iniciar impulsor</button></div><div class="rpm-block"><label for="rpm">Velocidad de rotación <strong><output id="rpm-value">1450</output> <small>RPM</small></strong></label><input id="rpm" type="range" min="0" max="3600" step="50" value="1450"><div class="range-labels"><span>0 RPM</span><span>3600 RPM</span></div><small>Velocidad visual reducida a 1/30 de la real.</small></div><div class="sim-block flow-block"><p class="eyebrow">RECORRIDO DEL FLUIDO</p><button id="flow" aria-pressed="false">≈ Animación del flujo</button></div></div>
+    </section>
+    <aside><section class="parts-panel"><div class="panel-title"><h2>Componentes</h2><span>10 PIEZAS</span></div><p class="muted">Selecciona una pieza para explorarla.</p><div id="parts-list"></div></section><section class="info-panel" aria-live="polite"><div class="info-kicker">FICHA DEL COMPONENTE <span id="part-number">01 / 10</span></div><h2 id="part-name">Carcasa / Voluta</h2><h3>FUNCIÓN</h3><p id="part-function"></p><h3>EFECTO EN EL SISTEMA</h3><p id="part-effect"></p><button id="visibility" aria-pressed="false">Ocultar pieza</button><button id="show-all">Mostrar todas</button></section></aside>
+  </div>
+  <section class="principle"><div><span class="eyebrow">PRINCIPIO DE FUNCIONAMIENTO</span><h2>Del movimiento a la energía hidráulica.</h2></div><ol><li><b>01</b><span><strong>Aspiración axial</strong>El fluido llega al ojo del impulsor.</span></li><li><b>02</b><span><strong>Transferencia de energía</strong>Los álabes impulsan el fluido hacia afuera.</span></li><li><b>03</b><span><strong>Descarga</strong>La voluta recoge y conduce el fluido.</span></li></ol></section>
+  <footer>3D GENIAL <span>Laboratorio de bombas centrífugas · Módulo 01</span><small>Visualización cualitativa. No representa una simulación CFD ni predice el rendimiento hidráulico.</small></footer>
+</main>
+<script type="module">import('./script.js').catch(error => { document.querySelector('#loading').textContent = 'No se pudo iniciar el visor. Abre el proyecto con un servidor local y verifica que WebGL esté habilitado.'; console.error(error); });</script>
+</body></html>
+
