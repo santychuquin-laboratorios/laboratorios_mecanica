@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d46"><title>Válvula de compuerta | 3D GENIAL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand"><span class="brand-icon">3D</span> GENIAL<span class="divider"></span><small>LABORATORIO VIRTUAL</small></div><span class="course">MECÁNICA DE FLUIDOS <b>03</b></span></header>
+<main>
+  <section class="intro"><div><p class="eyebrow">EXPLORA · COMPRENDE · EXPERIMENTA</p><h1>VÁLVULA DE COMPUERTA <span>3D INTERACTIVA</span></h1><p>Acciona el volante y observa cómo la cuña se eleva para liberar el conducto con paso prácticamente recto.</p></div><span class="badge"><i></i> Modelo interactivo</span></section>
+  <div class="workspace">
+    <section class="viewer-card" aria-label="Visor interactivo de la válvula de compuerta">
+      <div class="toolbar"><div class="modes"><button id="external" aria-pressed="true">◉ Vista externa</button><button id="internal" aria-pressed="false">◈ Vista interna</button><button id="explode" aria-pressed="false">⌘ Despiece</button></div><button id="assemble">↺ Armar válvula</button></div>
+      <div id="viewport"><div class="scene-heading"><span class="eyebrow">VÁLVULA MULTIVUELTA</span><strong id="view-title">Conjunto ensamblado</strong></div><div class="scene-meta">MODELO DIDÁCTICO<br><span>ICP C150RF/C300RF · sin escala</span></div><div id="labels"></div><div id="loading" role="status">Preparando el modelo 3D…</div><div class="orientation">Y ↑ <span>Z ↙</span> X →</div><div class="canvas-actions"><button id="labels-toggle" aria-pressed="false">⌖ Mostrar etiquetas</button><button id="reset">↺ Reiniciar cámara</button></div></div>
+      <div class="viewer-footer"><span><b>↔</b> Arrastra para girar <span class="desktop-hint">· Rueda para acercar · Clic para explorar</span></span><span class="touch-hint">Un dedo: giro · Dos dedos: zoom</span><span id="status" role="status">7 componentes independientes</span></div>
+      <div class="simulation"><div class="sim-block"><p class="eyebrow">ACCIONAMIENTO</p><button id="spin" class="primary" aria-pressed="false">▶ Abrir automáticamente</button></div><div class="rpm-block"><label for="opening">Elevación de la compuerta <strong><output id="opening-value">0</output> <small>%</small></strong></label><input id="opening" type="range" min="0" max="100" step="1" value="0"><div class="range-labels"><span>0% Cerrada</span><span>100% Abierta</span></div><small>El volante transforma giro en desplazamiento lineal.</small></div><div class="sim-block fluid-block"><p class="eyebrow">AGUA CONTINUA</p><button id="fluid-toggle" aria-pressed="false">≈ Mostrar agua</button></div></div>
+    </section>
+    <aside><section class="parts-panel"><div class="panel-title"><h2>Componentes</h2><span>7 PIEZAS</span></div><p class="muted">Selecciona una pieza para explorarla.</p><div id="parts-list"></div></section><section class="info-panel" aria-live="polite"><div class="info-kicker">FICHA DEL COMPONENTE <span id="part-number">01 / 07</span></div><h2 id="part-name">Cuerpo y bridas</h2><h3>FUNCIÓN</h3><p id="part-function"></p><h3>EFECTO EN EL SISTEMA</h3><p id="part-effect"></p><button id="visibility" aria-pressed="false">Ocultar pieza</button><button id="show-all">Mostrar todas</button><section class="loss-chart" aria-label="Datos hidráulicos de catálogo"><div class="loss-chart-head"><span>COEFICIENTE DE CAUDAL</span><strong>Kv = <output id="kv-value">21,6</output> (m³/h)/√(ΔP)</strong></div><label class="k-selector">Tamaño nominal<select id="size-select"><option value="15">½″ · DN 15</option><option value="20">¾″ · DN 20</option><option value="25" selected>1″ · DN 25</option><option value="32">1¼″ · DN 32</option><option value="40">1½″ · DN 40</option><option value="50">2″ · DN 50</option></select></label><canvas id="kv-chart" width="640" height="360"></canvas><strong id="kv-reading" class="k-reading"></strong><p><b>Unidad de Kv: (m³/h)/√(ΔP).</b> Valores correspondientes a la válvula completamente abierta; ficha ICP C150RF/C300RF Rev. 6, página 4.</p></section></section></aside>
+  </div>
+  <section class="principle"><div><span class="eyebrow">PRINCIPIO DE FUNCIONAMIENTO</span><h2>La cuña se desplaza, no gira dentro del flujo.</h2></div><ol><li><b>01</b><span><strong>Compuerta cerrada</strong>La cuña apoya sobre los asientos y bloquea el paso.</span></li><li><b>02</b><span><strong>Ascenso multivuelta</strong>El giro del volante eleva vástago y compuerta.</span></li><li><b>03</b><span><strong>Paso completamente abierto</strong>La cuña sale del conducto y reduce la obstrucción.</span></li></ol></section>
+  <footer>3D GENIAL <span>Laboratorio de válvulas de compuerta · Módulo 03</span><small>Modelo didáctico inspirado en la ficha ICP C150RF/C300RF.</small></footer>
+</main>
+<script src="vendor/three.classic.js"></script><script src="catalog-data.js"></script><script src="script.js"></script>
+</body></html>
