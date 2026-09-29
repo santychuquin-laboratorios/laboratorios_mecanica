@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d46"><title>Válvula mariposa | 3D GENIAL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand"><span class="brand-icon">3D</span> GENIAL<span class="divider"></span><small>LABORATORIO VIRTUAL</small></div><span class="course">MECÁNICA DE FLUIDOS <b>02</b></span></header>
+<main>
+  <section class="intro"><div><p class="eyebrow">EXPLORA · COMPRENDE · EXPERIMENTA</p><h1>VÁLVULA MARIPOSA <span>3D INTERACTIVA</span></h1><p>Explora sus componentes y controla la apertura del disco para comprender la regulación del caudal.</p></div><span class="badge"><i></i> Modelo interactivo</span></section>
+  <div class="workspace">
+    <section class="viewer-card" aria-label="Visor interactivo de la válvula mariposa">
+      <div class="toolbar"><div class="modes"><button id="external" aria-pressed="true">◉ Vista externa</button><button id="internal" aria-pressed="false">◈ Vista interna</button><button id="explode" aria-pressed="false">⌘ Despiece</button></div><button id="assemble">↺ Armar válvula</button></div>
+      <div id="viewport"><div class="scene-heading"><span class="eyebrow">VÁLVULA DE CUARTO DE VUELTA</span><strong id="view-title">Conjunto ensamblado</strong></div><div class="scene-meta">MODELO DIDÁCTICO<br><span>Inspiración ERHARD ROCO · sin escala</span></div><div id="labels"></div><div id="loading" role="status">Preparando el modelo 3D…</div><div class="orientation">Y ↑ <span>Z ↙</span> X →</div><div class="canvas-actions"><button id="labels-toggle" aria-pressed="false">⌖ Mostrar etiquetas</button><button id="reset">↺ Reiniciar cámara</button></div></div>
+      <div class="viewer-footer"><span><b>↔</b> Arrastra para girar <span class="desktop-hint">· Rueda para acercar · Clic para explorar</span></span><span class="touch-hint">Un dedo: giro · Dos dedos: zoom</span><span id="status" role="status">7 componentes independientes</span></div>
+      <div class="simulation"><div class="sim-block"><p class="eyebrow">ACCIONAMIENTO</p><button id="spin" class="primary" aria-pressed="false">▶ Abrir automáticamente</button></div><div class="rpm-block"><label for="opening">Posición del disco <strong><output id="opening-value">0</output> <small>°</small></strong></label><input id="opening" type="range" min="0" max="90" step="1" value="0"><div class="range-labels"><span>0° Cerrada</span><span>90° Abierta</span></div><small>La posición regula el paso de fluido.</small></div><div class="sim-block fluid-block"><p class="eyebrow">AGUA CONTINUA</p><button id="fluid-toggle" aria-pressed="false">≈ Mostrar agua</button></div></div>
+    </section>
+    <aside><section class="parts-panel"><div class="panel-title"><h2>Componentes</h2><span>7 PIEZAS</span></div><p class="muted">Selecciona una pieza para explorarla.</p><div id="parts-list"></div></section><section class="info-panel" aria-live="polite"><div class="info-kicker">FICHA DEL COMPONENTE <span id="part-number">01 / 07</span></div><h2 id="part-name">Cuerpo de la válvula</h2><h3>FUNCIÓN</h3><p id="part-function"></p><h3>EFECTO EN EL SISTEMA</h3><p id="part-effect"></p><button id="visibility" aria-pressed="false">Ocultar pieza</button><button id="show-all">Mostrar todas</button><section class="loss-chart" aria-label="Gráfica del coeficiente K según el grado de apertura"><div class="loss-chart-head"><span>COEFICIENTE DE PÉRDIDA</span><strong>K = <output id="k-value">Sin dato</output></strong></div><label class="k-selector">Catálogo usado en el cálculo<select id="k-catalog"><option value="avk756">AVK serie 756 · DN 400</option><option value="avk820">AVK serie 820 · DN 400</option></select></label><div class="k-legend"><span class="k-756">● AVK 756</span><span class="k-820">■ AVK 820</span></div><canvas id="k-chart" width="640" height="360"></canvas><strong id="k-reading" class="k-reading"></strong><p>Los puntos son valores tabulados por AVK; las líneas solo interpolan en escala logarítmica. No se extrapola fuera del intervalo publicado. Fuentes: <a href="https://www.avkvalves.eu/-/media/websites/local-websites/avk-international/files/downloads/certificates-and-technical-information/app1_s756_flow.pdf" target="_blank" rel="noopener">serie 756, p. 3</a> · <a href="https://www.avkvalvulas.com/-/media/websites/local-websites/avk-spain/files/downloads/pressure-loss_820-en.pdf" target="_blank" rel="noopener">serie 820, p. 1</a>.</p></section></section></aside>
+  </div>
+  <section class="principle"><div><span class="eyebrow">PRINCIPIO DE FUNCIONAMIENTO</span><h2>Un giro de 90° controla el paso del fluido.</h2></div><ol><li><b>01</b><span><strong>Disco cerrado</strong>El disco bloquea el conducto.</span></li><li><b>02</b><span><strong>Apertura parcial</strong>El área de paso regula el caudal.</span></li><li><b>03</b><span><strong>Disco abierto</strong>El flujo atraviesa el cuerpo con menor pérdida.</span></li></ol></section>
+  <footer>3D GENIAL <span>Laboratorio de válvulas mariposa · Módulo 02</span><small>Modelo tridimensional didáctico con datos hidráulicos de catálogo.</small></footer>
+</main>
+<script src="vendor/three.classic.js"></script>
+<script src="catalog-model.js"></script>
+<script src="catalog-k.js"></script>
+<script src="script.js"></script>
+</body></html>
